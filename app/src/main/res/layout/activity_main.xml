@@ -6,9 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <org.opencv.android.JavaCameraView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        <org.opencv.android.JavaCameraView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            opencv:camera_id="front"
+            opencv:show_fps="false"
+            android:id="@+id/camera_view" />
 
-        android:id="@+id/camera_view" />
+
 </RelativeLayout>
