@@ -1,4 +1,4 @@
-package influenz.de.paircompare;
+package influenz.de.paircompare.hybrid;
 
 
 import org.opencv.core.Mat;

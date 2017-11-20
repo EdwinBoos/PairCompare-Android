@@ -2,28 +2,25 @@ package influenz.de.paircompare.util;
 
 
 import android.content.Context;
-import org.opencv.objdetect.CascadeClassifier;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import influenz.de.paircompare.R;
 
-public class CascadeClassifierLoader extends CascadeClassifier {
+
+public class HaarCascadeLoader {
 
     private File cascadeFile;
+    private File cascadeDir;
 
-    public CascadeClassifierLoader(Context context, String cascadeFilePath) throws FileNotFoundException {
+    public HaarCascadeLoader(Context context, int cascadeFilePath, String  fileName) {
 
-        super(cascadeFilePath);
 
-        InputStream is = context.getResources().openRawResource(R.raw.haarcascade_frontalface_default);
-        File cascadeDir = context.getDir("cascade", Context.MODE_PRIVATE);
-        cascadeFile = new File(cascadeDir, "haarcascade_frontalface_default.xml");
+        InputStream is = context.getResources().openRawResource(cascadeFilePath);
+        cascadeDir = context.getDir("cascade", Context.MODE_PRIVATE);
+        cascadeFile = new File(cascadeDir, fileName);
 
-        try
-        {
+        try {
             FileOutputStream os = new FileOutputStream(cascadeFile);
 
             byte[] buffer = new byte[4096];
@@ -33,14 +30,23 @@ public class CascadeClassifierLoader extends CascadeClassifier {
             }
             is.close();
             os.close();
-            cascadeDir.delete();
 
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
     }
+
+    public String getAbsolutePath() {
+        return cascadeFile.getAbsolutePath();
+    }
+
+    public HaarCascadeLoader deleteCascadeDir() {
+        cascadeDir.delete();
+        return this;
+    }
+
+
+
+
 }
+

@@ -2,8 +2,8 @@
 #include <jni.h>
 /* Header for class org_opencv_samples_fd_DetectionBasedTracker */
 
-#ifndef _Included_influenz_de_paircompare_DetectionBasedTracker
-#define _Included_influenz_de_paircompare_DetectionBasedTracker
+#ifndef _Included_influenz_de_paircompare_hybrid_DetectionBasedTracker
+#define _Included_influenz_de_paircompare_hybrid_DetectionBasedTracker
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,7 +12,7 @@ extern "C" {
  * Method:    nativeCreateObject
  * Signature: (Ljava/lang/String;F)J
  */
-JNIEXPORT jlong JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeCreateObject
+JNIEXPORT jlong JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeCreateObject
   (JNIEnv *, jclass, jstring, jint);
 
 /*
@@ -20,7 +20,7 @@ JNIEXPORT jlong JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativ
  * Method:    nativeDestroyObject
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeDestroyObject
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeDestroyObject
   (JNIEnv *, jclass, jlong);
 
 /*
@@ -28,7 +28,7 @@ JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_native
  * Method:    nativeStart
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeStart
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeStart
   (JNIEnv *, jclass, jlong);
 
 /*
@@ -36,7 +36,7 @@ JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_native
  * Method:    nativeStop
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeStop
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeStop
   (JNIEnv *, jclass, jlong);
 
   /*
@@ -44,7 +44,7 @@ JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_native
    * Method:    nativeSetFaceSize
    * Signature: (JI)V
    */
-  JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeSetFaceSize
+  JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeSetFaceSize
   (JNIEnv *, jclass, jlong, jint);
 
 /*
@@ -52,7 +52,7 @@ JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_native
  * Method:    nativeDetect
  * Signature: (JJJ)V
  */
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeDetect
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeDetect
   (JNIEnv *, jclass, jlong, jlong, jlong);
 
 #ifdef __cplusplus

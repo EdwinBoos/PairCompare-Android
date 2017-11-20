@@ -63,7 +63,7 @@ struct DetectorAgregator {
     }
 };
 
-JNIEXPORT jlong JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeCreateObject
+JNIEXPORT jlong JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeCreateObject
         (JNIEnv *jenv, jclass, jstring jFileName, jint faceSize) {
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeCreateObject enter");
     const char *jnamestr = jenv->GetStringUTFChars(jFileName, NULL);
@@ -103,7 +103,7 @@ JNIEXPORT jlong JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativ
     return result;
 }
 
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeDestroyObject
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeDestroyObject
         (JNIEnv *jenv, jclass, jlong thiz) {
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeDestroyObject");
 
@@ -128,7 +128,7 @@ JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_native
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeDestroyObject exit");
 }
 
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeStart
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeStart
         (JNIEnv *jenv, jclass, jlong thiz) {
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeStart");
 
@@ -150,7 +150,7 @@ JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_native
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeStart exit");
 }
 
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeStop
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeStop
         (JNIEnv *jenv, jclass, jlong thiz) {
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeStop");
 
@@ -172,7 +172,7 @@ JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_native
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeStop exit");
 }
 
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeSetFaceSize
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeSetFaceSize
         (JNIEnv *jenv, jclass, jlong thiz, jint faceSize) {
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeSetFaceSize -- BEGIN");
 
@@ -198,7 +198,7 @@ JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_native
 }
 
 
-JNIEXPORT void JNICALL Java_influenz_de_paircompare_DetectionBasedTracker_nativeDetect
+JNIEXPORT void JNICALL Java_influenz_de_paircompare_hybrid_DetectionBasedTracker_nativeDetect
         (JNIEnv *jenv, jclass, jlong thiz, jlong imageGray, jlong faces) {
     LOGD("Java_org_opencv_samples_facedetect_DetectionBasedTracker_nativeDetect");
 
