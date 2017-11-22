@@ -72,8 +72,8 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                                                                     "haarcascade_righteye_2splits.xml");
 
                     nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.getAbsolutePath(), 0);
-                    //nativeLeftEyeDetector = new DetectionBasedTracker(haarCascadeLeftEyeLoader.getAbsolutePath(), 0);
-                    //nativeRightEyeDetector = new DetectionBasedTracker(haarCascadeRightEyeLoader.getAbsolutePath(), 0);
+                    nativeLeftEyeDetector = new DetectionBasedTracker(haarCascadeLeftEyeLoader.getAbsolutePath(), 0);
+                    nativeRightEyeDetector = new DetectionBasedTracker(haarCascadeRightEyeLoader.getAbsolutePath(), 0);
                     haarCascadeFaceLoader.deleteCascadeDir();
                     haarCascadeLeftEyeLoader.deleteCascadeDir();
                     haarCascadeRightEyeLoader.deleteCascadeDir();
