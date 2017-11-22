@@ -8,15 +8,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-public class HaarCascadeLoader {
+public final class HaarCascadeLoader {
 
-    private File cascadeFile;
-    private File cascadeDir;
+    private final File cascadeFile;
+    private final File cascadeDir;
 
-    public HaarCascadeLoader(Context context, int cascadeFilePath, String  fileName) {
+    public HaarCascadeLoader(final Context context, final int cascadeFilePath, final String fileName) {
 
 
-        InputStream is = context.getResources().openRawResource(cascadeFilePath);
+        final InputStream is = context.getResources().openRawResource(cascadeFilePath);
         cascadeDir = context.getDir("cascade", Context.MODE_PRIVATE);
         cascadeFile = new File(cascadeDir, fileName);
 
