@@ -89,3 +89,4 @@ target_link_libraries(detectionBasedTracker android log
     libopencv_java3 libopencv_calib3d libopencv_core libopencv_features2d libopencv_flann libopencv_highgui libopencv_imgcodecs
     libopencv_imgproc libopencv_ml libopencv_objdetect libopencv_photo libopencv_shape libopencv_stitching libopencv_superres
     libopencv_video libopencv_videoio libopencv_videostab )
+

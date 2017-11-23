@@ -18,10 +18,6 @@ public class DetectionBasedTracker
         nativeStop(mNativeObj);
     }
 
-    public void setMinFaceSize(int size) {
-        nativeSetFaceSize(mNativeObj, size);
-    }
-
     public void detect(Mat imageGray, MatOfRect faces) {
         nativeDetect(mNativeObj, imageGray.getNativeObjAddr(), faces.getNativeObjAddr());
     }

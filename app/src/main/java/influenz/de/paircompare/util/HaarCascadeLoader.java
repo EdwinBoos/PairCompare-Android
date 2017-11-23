@@ -1,6 +1,5 @@
 package influenz.de.paircompare.util;
 
-
 import android.content.Context;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,16 +11,24 @@ public final class HaarCascadeLoader {
 
     private final File cascadeFile;
     private final File cascadeDir;
+    private final int cascadeFilePath;
+    private final Context context;
 
-    public HaarCascadeLoader(final Context context, final int cascadeFilePath, final String fileName) {
+    public HaarCascadeLoader(final Context context, final int cascadeFilePath)
+    {
+        this.context = context;
+        this.cascadeFilePath = cascadeFilePath;
+        this.cascadeDir = context.getDir("cascade", Context.MODE_PRIVATE);
+        this.cascadeFile = new File(cascadeDir, String.valueOf(cascadeFilePath) + ".xml");
+    }
 
+    public File load()
+    {
 
-        final InputStream is = context.getResources().openRawResource(cascadeFilePath);
-        cascadeDir = context.getDir("cascade", Context.MODE_PRIVATE);
-        cascadeFile = new File(cascadeDir, fileName);
-
+        final InputStream is = this.context.getResources().openRawResource(this.cascadeFilePath);
         try {
-            FileOutputStream os = new FileOutputStream(cascadeFile);
+
+            FileOutputStream os = new FileOutputStream(this.cascadeFile);
 
             byte[] buffer = new byte[4096];
             int bytesRead;
@@ -34,14 +41,14 @@ public final class HaarCascadeLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return this.cascadeFile;
+
     }
 
-    public String getAbsolutePath() {
-        return cascadeFile.getAbsolutePath();
-    }
-
-    public HaarCascadeLoader deleteCascadeDir() {
-        cascadeDir.delete();
+    public HaarCascadeLoader deleteCascadeDir()
+    {
+        this.cascadeDir.delete();
         return this;
     }
 

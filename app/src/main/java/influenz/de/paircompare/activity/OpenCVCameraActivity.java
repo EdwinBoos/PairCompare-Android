@@ -1,12 +1,12 @@
 package influenz.de.paircompare.activity;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
@@ -18,29 +18,23 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.objdetect.CascadeClassifier;
-import org.opencv.objdetect.Objdetect;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.hybrid.DetectionBasedTracker;
+import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.HaarCascadeLoader;
 
-public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2
+public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
 {
-
-    private static final Scalar RECT_COLOR = new Scalar(255, 255, 255);
 
     private Mat rgba;
     private Mat gray;
     private DetectionBasedTracker nativeFaceDetector;
-    private DetectionBasedTracker nativeLeftEyeDetector;
-    private DetectionBasedTracker nativeRightEyeDetector;
     private int                    facesFound = 0;
-    private int xCenter;
-    private int yCenter;
-    private int learn_frames = 0;
 
     private Button photoButton;
     private CameraBridgeViewBase openCvCameraView;
@@ -50,46 +44,21 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         @Override
         public void onManagerConnected(int status)
         {
-            switch (status) {
-                case LoaderCallbackInterface.SUCCESS:
-                {
+            if (status == LoaderCallbackInterface.SUCCESS)
+            {
+                System.loadLibrary("detectionBasedTracker");
+                HaarCascadeLoader haarCascadeFaceLoader = new HaarCascadeLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt2);
+                nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
+                haarCascadeFaceLoader.deleteCascadeDir();
+                openCvCameraView.enableView();
 
-                    System.loadLibrary("detectionBasedTracker");
-
-                    HaarCascadeLoader haarCascadeFaceLoader = new HaarCascadeLoader(
-                                                                    OpenCVCameraActivity.this,
-                                                                    R.raw.haarcascade_frontalface_alt2,
-                                                                    "haarcascade_frontalface_alt2.xml");
-
-                    HaarCascadeLoader haarCascadeLeftEyeLoader = new HaarCascadeLoader(
-                                                                    OpenCVCameraActivity.this,
-                                                                    R.raw.haarcascade_lefteye_2splits,
-                                                                    "haarcascade_lefteye_2splits.xml");
-
-                    HaarCascadeLoader haarCascadeRightEyeLoader = new HaarCascadeLoader(
-                                                                    OpenCVCameraActivity.this,
-                                                                    R.raw.haarcascade_righteye_2splits,
-                                                                    "haarcascade_righteye_2splits.xml");
-
-                    nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.getAbsolutePath(), 0);
-                    nativeLeftEyeDetector = new DetectionBasedTracker(haarCascadeLeftEyeLoader.getAbsolutePath(), 0);
-                    nativeRightEyeDetector = new DetectionBasedTracker(haarCascadeRightEyeLoader.getAbsolutePath(), 0);
-                    haarCascadeFaceLoader.deleteCascadeDir();
-                    haarCascadeLeftEyeLoader.deleteCascadeDir();
-                    haarCascadeRightEyeLoader.deleteCascadeDir();
-                    openCvCameraView.enableView();
-
-                }
-                break;
-                default: {
-                    super.onManagerConnected(status);
-                }
-                break;
+            }
+            else
+            {
+                super.onManagerConnected(status);
             }
         }
     };
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -97,8 +66,8 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_main);
-        openCvCameraView = (JavaCameraView) findViewById(R.id.camera_view);
+        setContentView(R.layout.activity_opencvcamera);
+        openCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_view);
         openCvCameraView.setVisibility(SurfaceView.VISIBLE);
         openCvCameraView.setCvCameraViewListener(this);
         photoButton = (Button) findViewById(R.id.photo_button_id);
@@ -125,6 +94,20 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         this.pauseCamera();
     }
 
+    public void handleTakePhotoButtonPress(View view)
+    {
+        this.pauseCamera();
+    }
+
+    public void handleFlipCameraButtonPress(View view)
+    {
+
+        this.resumeCamera();
+        openCvCameraView.setCameraIndex(
+                ( openCvCameraView.getCameraIndex() == CameraBridgeViewBase.CAMERA_ID_BACK)
+                        ? CameraBridgeViewBase.CAMERA_ID_FRONT
+                        : CameraBridgeViewBase.CAMERA_ID_BACK );
+    }
 
     private void resumeCamera()
     {
@@ -167,43 +150,38 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         Rect[] facesArray = faces.toArray();
         facesFound = facesArray.length;
 
+        int xCenter;
+        int yCenter;
+        int facesCounter = 0;
+
         for (Rect nextFace : facesArray)
         {
-            Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), RECT_COLOR, 3);
+
+            facesCounter++;
+            Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), ScalarEnum.scalarFace, ThicknessEnum.rectAngleFace);
             xCenter = (nextFace.x + nextFace.width + nextFace.x) / 2;
             yCenter = (nextFace.y + nextFace.y + nextFace.height) / 2;
             Point center = new Point(xCenter, yCenter);
 
-            Imgproc.circle(rgba, center, 10, new Scalar(255, 0, 0, 255), 3);
+            Imgproc.putText(rgba, "Face " + facesCounter,
+                    new Point(center.x + 20, center.y + 20),
+                    Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
 
-//            Imgproc.putText(rgba, "[" + center.x + "," + center.y + "]",
-//                    new Point(center.x + 20, center.y + 20),
-//                    Core.FONT_HERSHEY_SIMPLEX, 0.7, new Scalar(255, 255, 255,
-//                            255));
-
-            Rect r = nextFace;
-            // compute the eye area
-            Rect eyearea = new Rect(r.x + r.width / 8,
-                    (int) (r.y + (r.height / 4.5)), r.width - 2 * r.width / 8,
-                    (int) (r.height / 3.0));
             // split it
-            Rect eyearea_right = new Rect(r.x + r.width / 16,
-                    (int) (r.y + (r.height / 4.5)),
-                    (r.width - 2 * r.width / 16) / 2, (int) (r.height / 3.0));
-            Rect eyearea_left = new Rect(r.x + r.width / 16
-                    + (r.width - 2 * r.width / 16) / 2,
-                    (int) (r.y + (r.height / 4.5)),
-                    (r.width - 2 * r.width / 16) / 2, (int) (r.height / 3.0));
+            Rect eyeareaRight = new Rect(nextFace.x + nextFace.width / 16,
+                    (int) (nextFace.y + (nextFace.height / 4.5)),
+                    (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
+            Rect eyeareaLeft = new Rect(nextFace.x + nextFace.width / 16
+                    + (nextFace.width - 2 * nextFace.width / 16) / 2,
+                    (int) (nextFace.y + (nextFace.height / 4.5)),
+                    (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
+
             // draw the area - mGray is working grayscale mat, if you want to
             // see area in rgb preview, change mGray to mRgba
-            Imgproc.rectangle(rgba, eyearea_left.tl(), eyearea_left.br(),
-                    new Scalar(255, 0, 0, 255), 2);
-            Imgproc.rectangle(rgba, eyearea_right.tl(), eyearea_right.br(),
-                    new Scalar(255, 0, 0, 255), 2);
+            Imgproc.rectangle(rgba, eyeareaLeft.tl(), eyeareaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
+            Imgproc.rectangle(rgba, eyeareaRight.tl(), eyeareaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
 
-
-            }
-
+        }
 
         // We need to run android view changes on a different thread.
         OpenCVCameraActivity.this.runOnUiThread(new Runnable()
@@ -211,29 +189,11 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
             @Override
             public void run()
             {
-                 photoButton.setEnabled(facesFound > 0);
+                 photoButton.setEnabled(facesFound > FaceEnum.minFacesFound);
             }
         });
 
         return rgba;
     }
-
-    public void handleTakePhotoButtonPress(View view)
-    {
-        this.pauseCamera();
-    }
-
-    public void handleFlipCameraButtonPress(View view)
-    {
-
-        this.resumeCamera();
-        openCvCameraView.setCameraIndex(
-                ( openCvCameraView.getCameraIndex() == CameraBridgeViewBase.CAMERA_ID_BACK)
-                        ? CameraBridgeViewBase.CAMERA_ID_FRONT
-                        : CameraBridgeViewBase.CAMERA_ID_BACK );
-    }
-
-
-
 
 }
