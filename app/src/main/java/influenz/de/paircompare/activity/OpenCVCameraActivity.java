@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
@@ -17,15 +16,11 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.hybrid.DetectionBasedTracker;
 import influenz.de.paircompare.interfaces.IEnum;
+import influenz.de.paircompare.util.ConverterFactory;
 import influenz.de.paircompare.util.HaarCascadeLoader;
 
 public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
@@ -33,10 +28,10 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
     private Mat rgba;
     private Mat gray;
+    private int facesFound = 0;
     private DetectionBasedTracker nativeFaceDetector;
-    private int                    facesFound = 0;
-
     private Button photoButton;
+    private MatOfRect faces;
     private CameraBridgeViewBase openCvCameraView;
 
     private BaseLoaderCallback loaderCallback = new BaseLoaderCallback(this)
@@ -96,6 +91,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
     public void handleTakePhotoButtonPress(View view)
     {
+        new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
         this.pauseCamera();
     }
 
@@ -145,7 +141,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
         rgba = inputFrame.rgba();
         gray = inputFrame.gray();
-        MatOfRect faces = new MatOfRect();
+        faces = new MatOfRect();
         nativeFaceDetector.detect(gray, faces);
         Rect[] facesArray = faces.toArray();
         facesFound = facesArray.length;
