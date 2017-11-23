@@ -26,19 +26,20 @@ public final class HaarCascadeLoader {
     {
 
         final InputStream is = this.context.getResources().openRawResource(this.cascadeFilePath);
-        try {
+        try
+        {
 
-            FileOutputStream os = new FileOutputStream(this.cascadeFile);
-
-            byte[] buffer = new byte[4096];
+            final FileOutputStream os = new FileOutputStream(this.cascadeFile);
             int bytesRead;
+            final byte[] buffer = new byte[4096];
             while ((bytesRead = is.read(buffer)) != -1) {
                 os.write(buffer, 0, bytesRead);
             }
             is.close();
             os.close();
 
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
 
@@ -51,9 +52,6 @@ public final class HaarCascadeLoader {
         this.cascadeDir.delete();
         return this;
     }
-
-
-
 
 }
 
