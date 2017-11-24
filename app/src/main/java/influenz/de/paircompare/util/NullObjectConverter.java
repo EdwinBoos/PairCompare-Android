@@ -10,9 +10,11 @@ import influenz.de.paircompare.interfaces.IConverter;
 public final class NullObjectConverter implements IConverter
 {
     @Override
-    public void convert(Mat mat, Bitmap bitmap)
+    public Object convert(Mat mat, Bitmap bitmap)
     {
         Log.e("NullObjectConverter", "Please check the action you provided to the converterFactory, " +
                 "something went wrong.");
+
+        return this;
     }
 }

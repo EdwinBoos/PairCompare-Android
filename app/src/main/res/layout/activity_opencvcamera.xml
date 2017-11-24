@@ -1,44 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:opencv="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.OpenCVCameraActivity">
 
-        <org.opencv.android.JavaCameraView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            opencv:camera_id="front"
-            opencv:show_fps="true"
-            android:id="@+id/camera_view"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true">
-        </org.opencv.android.JavaCameraView>
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/camera_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        opencv:camera_id="front"
+        opencv:show_fps="false">
 
+    </org.opencv.android.JavaCameraView>
 
+    <TextView
+        android:id="@+id/text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/switch_id"
+        android:layout_alignBottom="@+id/switch_id"
+        android:layout_toEndOf="@+id/switch_id"
+        android:text="@string/smart_detection"
+        android:textColor="@color/colorAccent">
+
+    </TextView>
+
+    <Switch
+        android:id="@+id/switch_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/photo_button_id"
+        android:layout_alignStart="@+id/photo_button_id"
+        android:onClick="handleSwitchPress" />
 
     <Button
         android:id="@+id/flip_camera_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/flip_camera"
         android:layout_alignParentBottom="true"
-        android:onClick="handleFlipCameraButtonPress"
-        android:drawableLeft="@android:drawable/ic_menu_rotate"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="12dp" />
+        android:layout_marginStart="12dp"
+        android:drawableLeft="@android:drawable/ic_menu_rotate"
+        android:onClick="handleFlipCameraButtonPress"
+        android:text="@string/flip_camera" />
 
     <Button
         android:id="@+id/photo_button_id"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/take_photo"
-        android:onClick="handleTakePhotoButtonPress"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/flip_camera_id"
+        android:layout_alignEnd="@+id/flip_camera_id"
+        android:layout_alignStart="@+id/flip_camera_id"
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:enabled="false"
-        android:layout_alignStart="@+id/flip_camera_id"
-        android:layout_alignEnd="@+id/flip_camera_id" />
+        android:onClick="handleTakePhotoButtonPress"
+        android:text="@string/take_photo" />
+
 
 </RelativeLayout>

@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">PairCompare</string>
+    <string name="smart_detection">SMART DETECTION</string>
     <string name="take_photo">TAKE PHOTO</string>
     <string name="flip_camera">FLIP CAMERA</string>
+    <string name="okay">Is it okay?</string>
+    <string name="yes">YES</string>
+    <string name="again">AGAIN</string>
 </resources>

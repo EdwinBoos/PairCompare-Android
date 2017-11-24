@@ -3,10 +3,15 @@ package influenz.de.paircompare.activity;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.Switch;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
@@ -19,6 +24,7 @@ import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.hybrid.DetectionBasedTracker;
+import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.ConverterFactory;
 import influenz.de.paircompare.util.HaarCascadeLoader;
@@ -28,11 +34,17 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
     private Mat rgba;
     private Mat gray;
+    private Rect[] facesArray;
     private int facesFound = 0;
     private DetectionBasedTracker nativeFaceDetector;
-    private Button photoButton;
+    private Button photoButtonView;
+    private Button flipCameraButtonView;
     private MatOfRect faces;
     private CameraBridgeViewBase openCvCameraView;
+    private ImageView imageViewFace1;
+    private ImageView imageViewFace2;
+    private Switch switchView;
+    private PopupWindow popupWindow;
 
     private BaseLoaderCallback loaderCallback = new BaseLoaderCallback(this)
     {
@@ -58,15 +70,24 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         setContentView(R.layout.activity_opencvcamera);
         openCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_view);
         openCvCameraView.setVisibility(SurfaceView.VISIBLE);
         openCvCameraView.setCvCameraViewListener(this);
-        photoButton = (Button) findViewById(R.id.photo_button_id);
+        photoButtonView = (Button) findViewById(R.id.photo_button_id);
+        flipCameraButtonView = (Button) findViewById(R.id.flip_camera_id);
+        switchView = (Switch) findViewById(R.id.switch_id);
 
+        View customView = inflater.inflate(R.layout.popup_window, null);
+
+        imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
+        imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
+
+        popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(false);
     }
 
     @Override
@@ -91,19 +112,44 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
     public void handleTakePhotoButtonPress(View view)
     {
-        new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
+
+        IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
+        Mat roiFace1 = gray.submat(facesArray[0]);
+        Mat roiFace2 = gray.submat(facesArray[0]); // TODO: 1 when two faces
+
+        Bitmap bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(),Bitmap.Config.ARGB_8888);
+        Bitmap bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(),Bitmap.Config.ARGB_8888);
+        converterFactory.convert(roiFace1, bitmapFace1);
+        converterFactory.convert(roiFace2, bitmapFace2);
+        imageViewFace1.setImageBitmap(bitmapFace1);
+        imageViewFace2.setImageBitmap(bitmapFace2);
+        popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER,0,0);
+
+        this.flipCameraButtonView.setEnabled(false);
+        this.photoButtonView.setEnabled(false);
+        this.switchView.setEnabled(false);
         this.pauseCamera();
+
     }
+
+
+    public void handleSwitchPress(View view)
+    {
+        photoButtonView.setEnabled(false);
+
+    }
+
 
     public void handleFlipCameraButtonPress(View view)
     {
-
-        this.resumeCamera();
+        this.pauseCamera();
         openCvCameraView.setCameraIndex(
                 ( openCvCameraView.getCameraIndex() == CameraBridgeViewBase.CAMERA_ID_BACK)
                         ? CameraBridgeViewBase.CAMERA_ID_FRONT
                         : CameraBridgeViewBase.CAMERA_ID_BACK );
+        this.resumeCamera();
     }
+
 
     private void resumeCamera()
     {
@@ -136,6 +182,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         rgba.release();
     }
 
+
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame)
     {
 
@@ -143,7 +190,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         gray = inputFrame.gray();
         faces = new MatOfRect();
         nativeFaceDetector.detect(gray, faces);
-        Rect[] facesArray = faces.toArray();
+        facesArray = faces.toArray();
         facesFound = facesArray.length;
 
         int xCenter;
@@ -160,7 +207,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
             Point center = new Point(xCenter, yCenter);
 
             Imgproc.putText(rgba, "Face " + facesCounter,
-                    new Point(center.x + 20, center.y + 20),
+                    new Point(center.x + 20, center.y + 40),
                     Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
 
             // split it
@@ -172,22 +219,22 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                     (int) (nextFace.y + (nextFace.height / 4.5)),
                     (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
 
-            // draw the area - mGray is working grayscale mat, if you want to
-            // see area in rgb preview, change mGray to mRgba
+            // draw the area - gray is working grayscale mat, if you want to
+            // see area in rgb preview, change gray to rgba
             Imgproc.rectangle(rgba, eyeareaLeft.tl(), eyeareaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
             Imgproc.rectangle(rgba, eyeareaRight.tl(), eyeareaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
 
-        }
-
-        // We need to run android view changes on a different thread.
-        OpenCVCameraActivity.this.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
+            // We need to run android view changes on a different thread.
+            OpenCVCameraActivity.this.runOnUiThread(new Runnable()
             {
-                 photoButton.setEnabled(facesFound > FaceEnum.minFacesFound);
-            }
-        });
+                @Override
+                public void run()
+                {
+                    photoButtonView.setEnabled(facesFound > FaceEnum.minFacesFound);
+                }
+            });
+
+        }
 
         return rgba;
     }
