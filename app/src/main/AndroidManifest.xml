@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.DarkActionBar" >
-        <activity android:name=".activity.OpenCVCameraActivity" >
+        <activity android:name=".activity.OpenCVCameraActivity" android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activity.ResultActivity" android:screenOrientation="landscape" >
         </activity>
     </application>
     <supports-screens

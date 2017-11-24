@@ -15,14 +15,23 @@
 
     </org.opencv.android.JavaCameraView>
 
+    <ProgressBar
+        android:id="@+id/progress_bar_id"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text3"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:id="@+id/text3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/switch_id"
-        android:layout_alignBottom="@+id/switch_id"
-        android:layout_toEndOf="@+id/switch_id"
-        android:text="@string/smart_detection"
+        android:layout_above="@+id/photo_button_id"
+        android:layout_alignEnd="@+id/photo_button_id"
+        android:layout_alignStart="@+id/photo_button_id"
+        android:layout_marginBottom="13dp"
+        android:text="@string/smart_photo"
         android:textColor="@color/colorAccent">
 
     </TextView>
@@ -31,8 +40,8 @@
         android:id="@+id/switch_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/photo_button_id"
-        android:layout_alignStart="@+id/photo_button_id"
+        android:layout_above="@+id/text3"
+        android:layout_alignStart="@+id/text3"
         android:onClick="handleSwitchPress" />
 
     <Button
@@ -42,6 +51,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="12dp"
+        android:textColor="@color/colorAccent"
         android:drawableLeft="@android:drawable/ic_menu_rotate"
         android:onClick="handleFlipCameraButtonPress"
         android:text="@string/flip_camera" />
@@ -49,9 +59,9 @@
     <Button
         android:id="@+id/photo_button_id"
         android:layout_width="wrap_content"
+        android:textColor="@color/colorAccent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/flip_camera_id"
-        android:layout_alignEnd="@+id/flip_camera_id"
         android:layout_alignStart="@+id/flip_camera_id"
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:enabled="false"

@@ -1,6 +1,7 @@
 package influenz.de.paircompare.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -41,6 +43,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     private Button flipCameraButtonView;
     private MatOfRect faces;
     private CameraBridgeViewBase openCvCameraView;
+    private ProgressBar progressBarView;
     private ImageView imageViewFace1;
     private ImageView imageViewFace2;
     private Switch switchView;
@@ -58,6 +61,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                 nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
                 haarCascadeFaceLoader.deleteCascadeDir();
                 openCvCameraView.enableView();
+                progressBarView.setVisibility(View.GONE);
 
             }
             else
@@ -70,44 +74,49 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         setContentView(R.layout.activity_opencvcamera);
+
         openCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_view);
         openCvCameraView.setVisibility(SurfaceView.VISIBLE);
         openCvCameraView.setCvCameraViewListener(this);
         photoButtonView = (Button) findViewById(R.id.photo_button_id);
         flipCameraButtonView = (Button) findViewById(R.id.flip_camera_id);
         switchView = (Switch) findViewById(R.id.switch_id);
+        progressBarView = (ProgressBar) findViewById(R.id.progress_bar_id);
+        progressBarView.setVisibility(View.VISIBLE);
 
         View customView = inflater.inflate(R.layout.popup_window, null);
-
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
         imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
 
         popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setOutsideTouchable(false);
+
     }
 
     @Override
     public void onPause()
     {
         super.onPause();
-        this.pauseCamera();
+        pauseCamera();
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-        this.resumeCamera();
+        photoButtonView.setEnabled(false);
+        resumeCamera();
     }
 
     public void onDestroy()
     {
         super.onDestroy();
-        this.pauseCamera();
+        pauseCamera();
     }
 
     public void handleTakePhotoButtonPress(View view)
@@ -121,14 +130,15 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         Bitmap bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(),Bitmap.Config.ARGB_8888);
         converterFactory.convert(roiFace1, bitmapFace1);
         converterFactory.convert(roiFace2, bitmapFace2);
+
         imageViewFace1.setImageBitmap(bitmapFace1);
         imageViewFace2.setImageBitmap(bitmapFace2);
         popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER,0,0);
 
-        this.flipCameraButtonView.setEnabled(false);
-        this.photoButtonView.setEnabled(false);
-        this.switchView.setEnabled(false);
-        this.pauseCamera();
+        flipCameraButtonView.setEnabled(false);
+        photoButtonView.setEnabled(false);
+        switchView.setEnabled(false);
+        pauseCamera();
 
     }
 
@@ -136,18 +146,35 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     public void handleSwitchPress(View view)
     {
         photoButtonView.setEnabled(false);
+    }
 
+
+    public void handleRepeatButtonPress(View view)
+    {
+        switchView.setEnabled(false);
+        photoButtonView.setEnabled(false);
+        flipCameraButtonView.setEnabled(false);
+        resumeCamera();
+        popupWindow.dismiss();
+    }
+
+
+    public void handleAcceptButtonPress(View view)
+    {
+        popupWindow.dismiss();
+        Intent myIntent = new Intent(this, ResultActivity.class);
+        startActivity(myIntent);
     }
 
 
     public void handleFlipCameraButtonPress(View view)
     {
-        this.pauseCamera();
+        pauseCamera();
         openCvCameraView.setCameraIndex(
                 ( openCvCameraView.getCameraIndex() == CameraBridgeViewBase.CAMERA_ID_BACK)
                         ? CameraBridgeViewBase.CAMERA_ID_FRONT
                         : CameraBridgeViewBase.CAMERA_ID_BACK );
-        this.resumeCamera();
+        resumeCamera();
     }
 
 
@@ -212,12 +239,9 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
             // split it
             Rect eyeareaRight = new Rect(nextFace.x + nextFace.width / 16,
-                    (int) (nextFace.y + (nextFace.height / 4.5)),
-                    (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
-            Rect eyeareaLeft = new Rect(nextFace.x + nextFace.width / 16
-                    + (nextFace.width - 2 * nextFace.width / 16) / 2,
-                    (int) (nextFace.y + (nextFace.height / 4.5)),
-                    (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
+                    (int) (nextFace.y + (nextFace.height / 4.5)), (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
+            Rect eyeareaLeft = new Rect(nextFace.x + nextFace.width / 16 + (nextFace.width - 2 * nextFace.width / 16) / 2,
+                    (int) (nextFace.y + (nextFace.height / 4.5)), (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
 
             // draw the area - gray is working grayscale mat, if you want to
             // see area in rgb preview, change gray to rgba
