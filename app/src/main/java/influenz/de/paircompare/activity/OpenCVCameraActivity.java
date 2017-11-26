@@ -37,6 +37,8 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     private Mat rgba;
     private Mat gray;
     private Rect[] facesArray;
+    private Bitmap bitmapFace1;
+    private Bitmap bitmapFace2;
     private int facesFound = 0;
     private DetectionBasedTracker nativeFaceDetector;
     private Button photoButtonView;
@@ -89,6 +91,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         progressBarView = (ProgressBar) findViewById(R.id.progress_bar_id);
         progressBarView.setVisibility(View.VISIBLE);
 
+
         View customView = inflater.inflate(R.layout.popup_window, null);
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
         imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
@@ -124,10 +127,10 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
         IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
         Mat roiFace1 = gray.submat(facesArray[0]);
-        Mat roiFace2 = gray.submat(facesArray[0]); // TODO: 1 when two faces
+        Mat roiFace2 = gray.submat(facesArray[1]);
 
-        Bitmap bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(),Bitmap.Config.ARGB_8888);
-        Bitmap bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(),Bitmap.Config.ARGB_8888);
+        bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(),Bitmap.Config.ARGB_8888);
+        bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(),Bitmap.Config.ARGB_8888);
         converterFactory.convert(roiFace1, bitmapFace1);
         converterFactory.convert(roiFace2, bitmapFace2);
 
@@ -162,8 +165,11 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     public void handleAcceptButtonPress(View view)
     {
         popupWindow.dismiss();
-        Intent myIntent = new Intent(this, ResultActivity.class);
-        startActivity(myIntent);
+        Intent intent = new Intent(this, ResultActivity.class);
+        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY); 
+        intent.putExtra("face1_bitmap", bitmapFace1);
+        intent.putExtra("face2_bitmap", bitmapFace2);
+        startActivity(intent);
     }
 
 
