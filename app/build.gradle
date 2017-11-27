@@ -35,7 +35,11 @@ android {
     }
 }
 
-
+repositories {
+    maven {
+        url 'https://dl.bintray.com/tzutalin/maven'
+    }
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -44,6 +48,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.tzutalin.dlib-android-app:dlib:1.0.4'
     compile 'junit:junit:4.12'
     compile project(path: ':openCVLibrary331')
 }

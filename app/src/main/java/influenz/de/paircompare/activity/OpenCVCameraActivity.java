@@ -63,7 +63,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                 nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
                 haarCascadeFaceLoader.deleteCascadeDir();
                 openCvCameraView.enableView();
-                progressBarView.setVisibility(View.GONE);
+                progressBarView.setVisibility(View.VISIBLE);
 
             }
             else
@@ -89,13 +89,11 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         flipCameraButtonView = (Button) findViewById(R.id.flip_camera_id);
         switchView = (Switch) findViewById(R.id.switch_id);
         progressBarView = (ProgressBar) findViewById(R.id.progress_bar_id);
-        progressBarView.setVisibility(View.VISIBLE);
-
+        progressBarView.setVisibility(View.GONE);
 
         View customView = inflater.inflate(R.layout.popup_window, null);
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
         imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
-
         popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setOutsideTouchable(false);
 
@@ -127,7 +125,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
         IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
         Mat roiFace1 = gray.submat(facesArray[0]);
-        Mat roiFace2 = gray.submat(facesArray[1]);
+        Mat roiFace2 = gray.submat(facesArray[0]); // TODO: 1 when prodcutive
 
         bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(),Bitmap.Config.ARGB_8888);
         bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(),Bitmap.Config.ARGB_8888);
@@ -166,9 +164,9 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     {
         popupWindow.dismiss();
         Intent intent = new Intent(this, ResultActivity.class);
-        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY); 
-        intent.putExtra("face1_bitmap", bitmapFace1);
-        intent.putExtra("face2_bitmap", bitmapFace2);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.putExtra(IntentKeyEnum.face1_key, bitmapFace1);
+        intent.putExtra(IntentKeyEnum.face2_key, bitmapFace2);
         startActivity(intent);
     }
 
