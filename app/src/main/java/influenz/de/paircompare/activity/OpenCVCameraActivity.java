@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.Switch;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -45,7 +44,6 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     private Button flipCameraButtonView;
     private MatOfRect faces;
     private CameraBridgeViewBase openCvCameraView;
-    private ProgressBar progressBarView;
     private ImageView imageViewFace1;
     private ImageView imageViewFace2;
     private Switch switchView;
@@ -63,7 +61,6 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                 nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
                 haarCascadeFaceLoader.deleteCascadeDir();
                 openCvCameraView.enableView();
-                progressBarView.setVisibility(View.VISIBLE);
 
             }
             else
@@ -88,8 +85,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         photoButtonView = (Button) findViewById(R.id.photo_button_id);
         flipCameraButtonView = (Button) findViewById(R.id.flip_camera_id);
         switchView = (Switch) findViewById(R.id.switch_id);
-        progressBarView = (ProgressBar) findViewById(R.id.progress_bar_id);
-        progressBarView.setVisibility(View.GONE);
+
 
         View customView = inflater.inflate(R.layout.popup_window, null);
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
