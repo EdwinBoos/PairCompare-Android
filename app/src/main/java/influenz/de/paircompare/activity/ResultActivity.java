@@ -65,11 +65,15 @@ public class ResultActivity extends Activity implements IEnum
                 }
 
                 faceLandmarkPaint = new Paint();
-                faceLandmarkPaint.setColor(Color.RED);
+                faceLandmarkPaint.setColor(Color.GREEN);
                 faceLandmarkPaint.setStrokeWidth(1);
                 faceLandmarkPaint.setStyle(Paint.Style.STROKE);
-                Canvas canvas = new Canvas();
-                canvas.setBitmap(bitmapFace1);
+                Canvas canvasFace1 = new Canvas();
+                canvasFace1.setBitmap(bitmapFace1);
+
+                Canvas canvasFace2 = new Canvas();
+                canvasFace1.setBitmap(bitmapFace2);
+
                 float resizeRatio = 1;
                 FaceDet faceDet = new FaceDet(
                         new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks)
@@ -80,13 +84,27 @@ public class ResultActivity extends Activity implements IEnum
                 for (final VisionDetRet ret : results)
                 {
                     ArrayList<Point> landmarks = ret.getFaceLandmarks();
+                    for (Point point : landmarks)
+                    {
+                        int pointX = (int) (point.x * resizeRatio);
+                        int pointY = (int) (point.y * resizeRatio);
+
+                        canvasFace1.drawCircle(pointX, pointY, 2, faceLandmarkPaint);
+                    }
+                }
+
+                List<VisionDetRet> results2 = faceDet.detect( bitmapFace2 );
+                for (final VisionDetRet ret : results2)
+                {
+                    ArrayList<Point> landmarks = ret.getFaceLandmarks();
                     for (Point point : landmarks) {
                         int pointX = (int) (point.x * resizeRatio);
                         int pointY = (int) (point.y * resizeRatio);
 
-                        canvas.drawCircle(pointX, pointY, 2, faceLandmarkPaint);
+                        canvasFace2.drawCircle(pointX, pointY, 2, faceLandmarkPaint);
                     }
                 }
+
                 return null;
             }
 
@@ -94,6 +112,7 @@ public class ResultActivity extends Activity implements IEnum
             protected void onPostExecute(Void unused)
             {
                 imageViewFace1.setImageBitmap(bitmapFace1);
+                imageViewFace2.setImageBitmap(bitmapFace2);
                 progressBarView.setVisibility(View.GONE);
             }
 
