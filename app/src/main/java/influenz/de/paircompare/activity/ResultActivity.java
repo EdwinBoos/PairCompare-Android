@@ -20,7 +20,7 @@ import java.util.List;
 
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.interfaces.IEnum;
-import influenz.de.paircompare.util.HaarCascadeLoader;
+import influenz.de.paircompare.util.RawFileLoader;
 
 
 public class ResultActivity extends Activity implements IEnum
@@ -52,7 +52,7 @@ public class ResultActivity extends Activity implements IEnum
             public void run() {
                 if (!new File(Constants.getFaceShapeModelPath()).exists())
                 {
-                    new HaarCascadeLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks).load();
+                    new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks).load();
                 }
 
                 faceLandmardkPaint = new Paint();
@@ -63,7 +63,7 @@ public class ResultActivity extends Activity implements IEnum
                 canvas.setBitmap(bitmapFace1);
                 float resizeRatio = 1;
                 FaceDet faceDet = new FaceDet(
-                            new HaarCascadeLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks)
+                            new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks)
                                                   .load()
                                                   .getAbsolutePath());
 

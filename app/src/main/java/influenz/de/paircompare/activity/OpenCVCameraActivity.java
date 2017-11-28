@@ -28,7 +28,7 @@ import influenz.de.paircompare.hybrid.DetectionBasedTracker;
 import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.ConverterFactory;
-import influenz.de.paircompare.util.HaarCascadeLoader;
+import influenz.de.paircompare.util.RawFileLoader;
 
 public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
 {
@@ -57,7 +57,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
             if (status == LoaderCallbackInterface.SUCCESS)
             {
                 System.loadLibrary("detectionBasedTracker");
-                HaarCascadeLoader haarCascadeFaceLoader = new HaarCascadeLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt2);
+                RawFileLoader haarCascadeFaceLoader = new RawFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt2);
                 nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
                 haarCascadeFaceLoader.deleteCascadeDir();
                 openCvCameraView.enableView();
