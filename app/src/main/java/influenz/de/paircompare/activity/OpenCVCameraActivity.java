@@ -238,15 +238,15 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                     Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
 
             // split it
-            Rect eyeareaRight = new Rect(nextFace.x + nextFace.width / 16,
+            Rect eyeAreaRight = new Rect(nextFace.x + nextFace.width / 16,
                     (int) (nextFace.y + (nextFace.height / 4.5)), (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
-            Rect eyeareaLeft = new Rect(nextFace.x + nextFace.width / 16 + (nextFace.width - 2 * nextFace.width / 16) / 2,
+            Rect eyeAreaLeft = new Rect(nextFace.x + nextFace.width / 16 + (nextFace.width - 2 * nextFace.width / 16) / 2,
                     (int) (nextFace.y + (nextFace.height / 4.5)), (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
 
             // draw the area - gray is working grayscale mat, if you want to
             // see area in rgb preview, change gray to rgba
-            Imgproc.rectangle(rgba, eyeareaLeft.tl(), eyeareaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
-            Imgproc.rectangle(rgba, eyeareaRight.tl(), eyeareaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
+            Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
+            Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
 
             // We need to run android view changes on a different thread.
             OpenCVCameraActivity.this.runOnUiThread(new Runnable()
