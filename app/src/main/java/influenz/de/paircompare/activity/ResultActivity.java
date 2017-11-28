@@ -7,8 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.tzutalin.dlib.Constants;
 import com.tzutalin.dlib.FaceDet;
@@ -28,9 +31,11 @@ public class ResultActivity extends Activity implements IEnum
 
     private ImageView imageViewFace1;
     private ImageView imageViewFace2;
+
     private Bitmap bitmapFace1;
     private Bitmap bitmapFace2;
-    private Paint faceLandmardkPaint;
+    private Paint faceLandmarkPaint;
+    private ProgressBar progressBarView;
 
 
     @Override
@@ -43,29 +48,33 @@ public class ResultActivity extends Activity implements IEnum
         imageViewFace1 = (ImageView) findViewById(R.id.face_1_id);
         imageViewFace2 = (ImageView) findViewById(R.id.face_2_id);
 
+        progressBarView = (ProgressBar) findViewById(R.id.progressbar_id);
+        progressBarView.setVisibility(View.VISIBLE);
+
         bitmapFace1 = intent.getParcelableExtra(IntentKeyEnum.face1_key);
         bitmapFace2 = intent.getParcelableExtra(IntentKeyEnum.face2_key);
 
-        this.runOnUiThread(new Runnable()
+        new AsyncTask<Void, Void, Void>()
         {
+
             @Override
-            public void run() {
+            protected Void doInBackground(Void... params) {
                 if (!new File(Constants.getFaceShapeModelPath()).exists())
                 {
                     new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks).load();
                 }
 
-                faceLandmardkPaint = new Paint();
-                faceLandmardkPaint.setColor(Color.GREEN);
-                faceLandmardkPaint.setStrokeWidth(2);
-                faceLandmardkPaint.setStyle(Paint.Style.STROKE);
+                faceLandmarkPaint = new Paint();
+                faceLandmarkPaint.setColor(Color.RED);
+                faceLandmarkPaint.setStrokeWidth(1);
+                faceLandmarkPaint.setStyle(Paint.Style.STROKE);
                 Canvas canvas = new Canvas();
                 canvas.setBitmap(bitmapFace1);
                 float resizeRatio = 1;
                 FaceDet faceDet = new FaceDet(
-                            new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks)
-                                                  .load()
-                                                  .getAbsolutePath());
+                        new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks)
+                                .load()
+                                .getAbsolutePath());
 
                 List<VisionDetRet> results = faceDet.detect( bitmapFace1 );
                 for (final VisionDetRet ret : results)
@@ -75,13 +84,21 @@ public class ResultActivity extends Activity implements IEnum
                         int pointX = (int) (point.x * resizeRatio);
                         int pointY = (int) (point.y * resizeRatio);
 
-                        canvas.drawCircle(pointX, pointY, 2, faceLandmardkPaint);
+                        canvas.drawCircle(pointX, pointY, 2, faceLandmarkPaint);
                     }
                 }
-
-                imageViewFace1.setImageBitmap(bitmapFace1);
+                return null;
             }
-        });
+
+            @Override
+            protected void onPostExecute(Void unused)
+            {
+                imageViewFace1.setImageBitmap(bitmapFace1);
+                progressBarView.setVisibility(View.GONE);
+            }
+
+        }.execute();
+
     }
 
     @Override
