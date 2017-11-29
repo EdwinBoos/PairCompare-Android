@@ -140,12 +140,10 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
     }
 
-
     public void handleSwitchPress(View view)
     {
         photoButtonView.setEnabled(false);
     }
-
 
     public void handleRepeatButtonPress(View view)
     {
@@ -156,17 +154,14 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         popupWindow.dismiss();
     }
 
-
     public void handleAcceptButtonPress(View view)
     {
         popupWindow.dismiss();
         Intent intent = new Intent(this, ResultActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra(IntentKeyEnum.face1_key, bitmapFace1);
         intent.putExtra(IntentKeyEnum.face2_key, bitmapFace2);
         startActivity(intent);
     }
-
 
     public void handleFlipCameraButtonPress(View view)
     {
@@ -177,7 +172,6 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                         : CameraBridgeViewBase.CAMERA_ID_BACK );
         resumeCamera();
     }
-
 
     private void resumeCamera()
     {

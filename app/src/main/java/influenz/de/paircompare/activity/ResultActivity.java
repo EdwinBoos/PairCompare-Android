@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.tzutalin.dlib.FaceDet;
-
-import java.io.File;
 import java.util.ArrayList;
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.interfaces.IEnum;
@@ -34,8 +32,9 @@ public class ResultActivity extends Activity implements IEnum
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    public void onCreate(Bundle savedInstanceState) 
     {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         Intent intent = getIntent();
