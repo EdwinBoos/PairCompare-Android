@@ -13,7 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.tzutalin.dlib.FaceDet;
-import com.tzutalin.dlib.VisionDetRet;
+
+import java.io.File;
 import java.util.ArrayList;
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.interfaces.IEnum;
@@ -25,7 +26,8 @@ public class ResultActivity extends Activity implements IEnum
 
     private ImageView imageViewFace1;
     private ImageView imageViewFace2;
-
+    private ArrayList<Point> face1Landmarks;
+    private ArrayList<Point> face2Landmarks;
     private Bitmap bitmapFace1;
     private Bitmap bitmapFace2;
     private ProgressBar progressBarView;
@@ -58,21 +60,18 @@ public class ResultActivity extends Activity implements IEnum
                 faceLandmarkPaint.setColor(Color.GREEN);
                 faceLandmarkPaint.setStrokeWidth(ThicknessEnum.strokeWidth);
                 faceLandmarkPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-                ArrayList<Point> faceLandmarks =
+                face1Landmarks =
                         new FaceDet(
-                            new RawFileLoader(
-                                    ResultActivity.this,
-                                    R.raw.shape_predictor_68_face_landmarks)
-                                .load()
-                                .getAbsolutePath())
-                          .detect(bitmapFace1)
-                          .get(FaceEnum.Face1Index)
-                          .getFaceLandmarks();
+                                new RawFileLoader(
+                                        ResultActivity.this,
+                                        R.raw.shape_predictor_68_face_landmarks)
+                                        .load()
+                                        .getAbsolutePath())
+                                .detect(bitmapFace1)
+                                .get(FaceEnum.Face1Index)
+                                .getFaceLandmarks();
 
-                for (Point point : faceLandmarks)
-                {
-                    canvasFace1.drawCircle(point.x, point.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
-                }
+                for (Point p : face1Landmarks) canvasFace1.drawCircle(p.x, p.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
 
                 return null;
             }
