@@ -13,6 +13,7 @@ public interface IEnum {
     {
         public static final int rectAngleFace = 3;
         public static final int rectAngleEyes = 2;
+        public static final int strokeWidth = 1;
     }
     final class FontSizeEnum
     {
@@ -29,6 +30,14 @@ public interface IEnum {
     {
         public static final String face1_key = "face1_bitmap";
         public static final String face2_key = "face2_bitmap";
+    }
+    final class RadiusEnum
+    {
+        public static final int canvasRadius = 1;
+    }
+    final class ComputationEnum
+    {
+        public static final int resizeRatio = 1;
     }
 
 }

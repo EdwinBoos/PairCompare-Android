@@ -39,7 +39,6 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     private Rect[] facesArray;
     private Bitmap bitmapFace1;
     private Bitmap bitmapFace2;
-    private EyeRegion eyeRegion;
     private int facesFound = 0;
     private DetectionBasedTracker nativeFaceDetector;
     private Button photoButtonView;
@@ -246,7 +245,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                 @Override
                 public void run()
                 {
-                    photoButtonView.setEnabled(facesFound > FaceEnum.minFacesFound);
+                    photoButtonView.setEnabled((facesFound > FaceEnum.minFacesFound));
                 }
             });
 

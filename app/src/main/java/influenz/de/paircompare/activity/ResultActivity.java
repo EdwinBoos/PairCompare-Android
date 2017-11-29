@@ -29,7 +29,6 @@ public class ResultActivity extends Activity implements IEnum
 
     private Bitmap bitmapFace1;
     private Bitmap bitmapFace2;
-    private Paint faceLandmarkPaint;
     private ProgressBar progressBarView;
 
 
@@ -55,32 +54,28 @@ public class ResultActivity extends Activity implements IEnum
             @Override
             protected Void doInBackground(Void... params)
             {
-                faceLandmarkPaint = new Paint();
+
+                Paint faceLandmarkPaint = new Paint();
+                Canvas canvasFace1 = new Canvas(bitmapFace1);
                 faceLandmarkPaint.setColor(Color.GREEN);
-                faceLandmarkPaint.setStrokeWidth(1);
-                faceLandmarkPaint.setStyle(Paint.Style.STROKE);
-
-                Canvas canvasFace1 = new Canvas();
-                canvasFace1.setBitmap(bitmapFace1);
-
-
-                float resizeRatio = 1;
+                faceLandmarkPaint.setStrokeWidth(ThicknessEnum.strokeWidth);
+                faceLandmarkPaint.setStyle(Paint.Style.FILL_AND_STROKE);
                 FaceDet faceDet = new FaceDet(
                         new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks)
                                 .load()
-                                .getAbsolutePath());
+                                .getAbsolutePath()
+                         );
 
-
-                List<VisionDetRet> results = faceDet.detect( bitmapFace1 );
-                for (final VisionDetRet ret : results)
+                List<VisionDetRet> faces = faceDet.detect( bitmapFace1 );
+                for (final VisionDetRet ret : faces)
                 {
                     ArrayList<Point> landmarks = ret.getFaceLandmarks();
                     for (Point point : landmarks)
                     {
-                        int pointX = (int) (point.x * resizeRatio);
-                        int pointY = (int) (point.y * resizeRatio);
+                        int pointX = (point.x * ComputationEnum.resizeRatio);
+                        int pointY = (point.y * ComputationEnum.resizeRatio);
 
-                        canvasFace1.drawCircle(pointX, pointY, 2, faceLandmarkPaint);
+                        canvasFace1.drawCircle(pointX, pointY, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint);
                     }
                 }
 
