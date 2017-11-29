@@ -12,15 +12,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
-import com.tzutalin.dlib.Constants;
 import com.tzutalin.dlib.FaceDet;
 import com.tzutalin.dlib.VisionDetRet;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.RawFileLoader;
@@ -58,27 +53,23 @@ public class ResultActivity extends Activity implements IEnum
         {
 
             @Override
-            protected Void doInBackground(Void... params) {
-                if (!new File(Constants.getFaceShapeModelPath()).exists())
-                {
-                    new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks).load();
-                }
-
+            protected Void doInBackground(Void... params)
+            {
                 faceLandmarkPaint = new Paint();
                 faceLandmarkPaint.setColor(Color.GREEN);
                 faceLandmarkPaint.setStrokeWidth(1);
                 faceLandmarkPaint.setStyle(Paint.Style.STROKE);
+
                 Canvas canvasFace1 = new Canvas();
                 canvasFace1.setBitmap(bitmapFace1);
 
-                Canvas canvasFace2 = new Canvas();
-                canvasFace1.setBitmap(bitmapFace2);
 
                 float resizeRatio = 1;
                 FaceDet faceDet = new FaceDet(
                         new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks)
                                 .load()
                                 .getAbsolutePath());
+
 
                 List<VisionDetRet> results = faceDet.detect( bitmapFace1 );
                 for (final VisionDetRet ret : results)
@@ -93,17 +84,7 @@ public class ResultActivity extends Activity implements IEnum
                     }
                 }
 
-                List<VisionDetRet> results2 = faceDet.detect( bitmapFace2 );
-                for (final VisionDetRet ret : results2)
-                {
-                    ArrayList<Point> landmarks = ret.getFaceLandmarks();
-                    for (Point point : landmarks) {
-                        int pointX = (int) (point.x * resizeRatio);
-                        int pointY = (int) (point.y * resizeRatio);
-
-                        canvasFace2.drawCircle(pointX, pointY, 2, faceLandmarkPaint);
-                    }
-                }
+                faceDet.release();
 
                 return null;
             }

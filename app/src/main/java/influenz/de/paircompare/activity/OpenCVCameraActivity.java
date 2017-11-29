@@ -28,6 +28,7 @@ import influenz.de.paircompare.hybrid.DetectionBasedTracker;
 import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.ConverterFactory;
+import influenz.de.paircompare.util.EyeRegion;
 import influenz.de.paircompare.util.RawFileLoader;
 
 public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
@@ -38,6 +39,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     private Rect[] facesArray;
     private Bitmap bitmapFace1;
     private Bitmap bitmapFace2;
+    private EyeRegion eyeRegion;
     private int facesFound = 0;
     private DetectionBasedTracker nativeFaceDetector;
     private Button photoButtonView;
@@ -57,7 +59,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
             if (status == LoaderCallbackInterface.SUCCESS)
             {
                 System.loadLibrary("detectionBasedTracker");
-                RawFileLoader haarCascadeFaceLoader = new RawFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt2);
+                RawFileLoader haarCascadeFaceLoader = new RawFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt);
                 nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
                 haarCascadeFaceLoader.deleteCascadeDir();
                 openCvCameraView.enableView();
@@ -85,7 +87,6 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         photoButtonView = (Button) findViewById(R.id.photo_button_id);
         flipCameraButtonView = (Button) findViewById(R.id.flip_camera_id);
         switchView = (Switch) findViewById(R.id.switch_id);
-
 
         View customView = inflater.inflate(R.layout.popup_window, null);
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
@@ -123,8 +124,9 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         Mat roiFace1 = gray.submat(facesArray[0]);
         Mat roiFace2 = gray.submat(facesArray[0]); // TODO: 1 when prodcutive
 
-        bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(),Bitmap.Config.ARGB_8888);
-        bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(),Bitmap.Config.ARGB_8888);
+        bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
+        bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
+
         converterFactory.convert(roiFace1, bitmapFace1);
         converterFactory.convert(roiFace2, bitmapFace2);
 
@@ -209,7 +211,6 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         rgba.release();
     }
 
-
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame)
     {
 
@@ -219,32 +220,23 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         nativeFaceDetector.detect(gray, faces);
         facesArray = faces.toArray();
         facesFound = facesArray.length;
-
-        int xCenter;
-        int yCenter;
         int facesCounter = 0;
 
         for (Rect nextFace : facesArray)
         {
-
             facesCounter++;
+
+            EyeRegion eyeRegion = new EyeRegion(nextFace);
             Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), ScalarEnum.scalarFace, ThicknessEnum.rectAngleFace);
-            xCenter = (nextFace.x + nextFace.width + nextFace.x) / 2;
-            yCenter = (nextFace.y + nextFace.y + nextFace.height) / 2;
+            int xCenter = (nextFace.x + nextFace.width + nextFace.x) / 2;
+            int yCenter = (nextFace.y + nextFace.y + nextFace.height) / 2;
             Point center = new Point(xCenter, yCenter);
+            Imgproc.putText(  rgba, "Face " + facesCounter, new Point(center.x + 20, center.y + 40),
+                              Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
 
-            Imgproc.putText(rgba, "Face " + facesCounter,
-                    new Point(center.x + 20, center.y + 40),
-                    Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
+            Rect eyeAreaRight = eyeRegion.computeRightEyeRegion();
+            Rect eyeAreaLeft = eyeRegion.computeLeftEyeRegion();
 
-            // split it
-            Rect eyeAreaRight = new Rect(nextFace.x + nextFace.width / 16,
-                    (int) (nextFace.y + (nextFace.height / 4.5)), (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
-            Rect eyeAreaLeft = new Rect(nextFace.x + nextFace.width / 16 + (nextFace.width - 2 * nextFace.width / 16) / 2,
-                    (int) (nextFace.y + (nextFace.height / 4.5)), (nextFace.width - 2 * nextFace.width / 16) / 2, (int) (nextFace.height / 3.0));
-
-            // draw the area - gray is working grayscale mat, if you want to
-            // see area in rgb preview, change gray to rgba
             Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
             Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
 
