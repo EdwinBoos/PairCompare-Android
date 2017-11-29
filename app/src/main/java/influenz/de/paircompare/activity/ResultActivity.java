@@ -68,7 +68,7 @@ public class ResultActivity extends Activity implements IEnum
                           .detect(bitmapFace1)
                           .get(FaceEnum.Face1Index)
                           .getFaceLandmarks();
-+
+
                 for (Point point : faceLandmarks)
                 {
                     canvasFace1.drawCircle(point.x, point.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
