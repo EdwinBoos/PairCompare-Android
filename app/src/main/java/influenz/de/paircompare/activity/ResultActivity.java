@@ -88,22 +88,4 @@ public class ResultActivity extends Activity implements IEnum
 
     }
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-    }
-
-    public void onDestroy()
-    {
-        super.onDestroy();
-
-    }
-
 }
