@@ -58,17 +58,18 @@ public class ResultActivity extends Activity implements IEnum
                 faceLandmarkPaint.setColor(Color.GREEN);
                 faceLandmarkPaint.setStrokeWidth(ThicknessEnum.strokeWidth);
                 faceLandmarkPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-                VisionDetRet face =
+                ArrayList<Point> faceLandmarks =
                         new FaceDet(
                             new RawFileLoader(
                                     ResultActivity.this,
                                     R.raw.shape_predictor_68_face_landmarks)
                                 .load()
-                                .getAbsolutePath()
-                         ).detect(bitmapFace1).get(FaceEnum.Face1Index);
-
-                ArrayList<Point> landmarks = face.getFaceLandmarks();
-                for (Point point : landmarks)
+                                .getAbsolutePath())
+                          .detect(bitmapFace1)
+                          .get(FaceEnum.Face1Index)
+                          .getFaceLandmarks();
++
+                for (Point point : faceLandmarks)
                 {
                     canvasFace1.drawCircle(point.x, point.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
                 }
