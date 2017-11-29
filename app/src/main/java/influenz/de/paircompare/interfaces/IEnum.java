@@ -6,6 +6,8 @@ public interface IEnum {
 
     final class FaceEnum
     {
+        public static final int Face1Index = 0;
+        public static final int Face2Index = 1;
         public static final int minFaceSize = 3;
         public static final int minFacesFound = 0; // starting with 0
     }
@@ -34,10 +36,6 @@ public interface IEnum {
     final class RadiusEnum
     {
         public static final int canvasRadius = 1;
-    }
-    final class ComputationEnum
-    {
-        public static final int resizeRatio = 1;
     }
 
 }

@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import com.tzutalin.dlib.FaceDet;
 import com.tzutalin.dlib.VisionDetRet;
 import java.util.ArrayList;
-import java.util.List;
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.RawFileLoader;
@@ -54,32 +53,25 @@ public class ResultActivity extends Activity implements IEnum
             @Override
             protected Void doInBackground(Void... params)
             {
-
                 Paint faceLandmarkPaint = new Paint();
                 Canvas canvasFace1 = new Canvas(bitmapFace1);
                 faceLandmarkPaint.setColor(Color.GREEN);
                 faceLandmarkPaint.setStrokeWidth(ThicknessEnum.strokeWidth);
                 faceLandmarkPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-                FaceDet faceDet = new FaceDet(
-                        new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks)
+                VisionDetRet face =
+                        new FaceDet(
+                            new RawFileLoader(
+                                    ResultActivity.this,
+                                    R.raw.shape_predictor_68_face_landmarks)
                                 .load()
                                 .getAbsolutePath()
-                         );
+                         ).detect(bitmapFace1).get(FaceEnum.Face1Index);
 
-                List<VisionDetRet> faces = faceDet.detect( bitmapFace1 );
-                for (final VisionDetRet ret : faces)
+                ArrayList<Point> landmarks = face.getFaceLandmarks();
+                for (Point point : landmarks)
                 {
-                    ArrayList<Point> landmarks = ret.getFaceLandmarks();
-                    for (Point point : landmarks)
-                    {
-                        int pointX = (point.x * ComputationEnum.resizeRatio);
-                        int pointY = (point.y * ComputationEnum.resizeRatio);
-
-                        canvasFace1.drawCircle(pointX, pointY, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint);
-                    }
+                    canvasFace1.drawCircle(point.x, point.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
                 }
-
-                faceDet.release();
 
                 return null;
             }
