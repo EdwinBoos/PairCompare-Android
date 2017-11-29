@@ -32,7 +32,7 @@ public class ResultActivity extends Activity implements IEnum
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) 
+    public void onCreate(Bundle savedInstanceState)
     {
 
         super.onCreate(savedInstanceState);

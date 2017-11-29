@@ -157,7 +157,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     public void handleAcceptButtonPress(View view)
     {
         popupWindow.dismiss();
-        Intent intent = new Intent(this, ResultActivity.class);
+        Intent intent = new Intent(OpenCVCameraActivity.this, ResultActivity.class);
         intent.putExtra(IntentKeyEnum.face1_key, bitmapFace1);
         intent.putExtra(IntentKeyEnum.face2_key, bitmapFace2);
         startActivity(intent);
@@ -233,17 +233,18 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
             Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
             Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
 
-            // We need to run android view changes on a different thread.
-            OpenCVCameraActivity.this.runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    photoButtonView.setEnabled((facesFound > FaceEnum.minFacesFound));
-                }
-            });
-
         }
+
+        // We need to run android view changes on a different thread.
+        OpenCVCameraActivity.this.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                photoButtonView.setEnabled((facesFound > FaceEnum.minFacesFound));
+            }
+        });
+
 
         return rgba;
     }
