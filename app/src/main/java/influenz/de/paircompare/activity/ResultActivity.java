@@ -73,7 +73,7 @@ public class ResultActivity extends Activity implements IEnum
                 face2Landmarks =
                     new FaceDet(rawFile.getAbsolutePath())
                                     .detect(bitmapFace2)
-                                    .get(FaceEnum.Face1Index)
+                                    .get(FaceEnum.Face2Index)
                                     .getFaceLandmarks();
 
 

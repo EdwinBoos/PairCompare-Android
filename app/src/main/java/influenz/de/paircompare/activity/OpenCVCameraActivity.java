@@ -204,7 +204,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         rgba.release();
     }
 
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame)
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) 
     {
 
         rgba = inputFrame.rgba();
