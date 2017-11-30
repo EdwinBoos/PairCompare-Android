@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.tzutalin.dlib.FaceDet;
+
+import java.io.File;
 import java.util.ArrayList;
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.interfaces.IEnum;
@@ -56,21 +58,27 @@ public class ResultActivity extends Activity implements IEnum
             {
                 Paint faceLandmarkPaint = new Paint();
                 Canvas canvasFace1 = new Canvas(bitmapFace1);
+                Canvas canvasFace2 = new Canvas(bitmapFace2);
+                File rawFile = new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks).load();
                 faceLandmarkPaint.setColor(Color.GREEN);
                 faceLandmarkPaint.setStrokeWidth(ThicknessEnum.strokeWidth);
                 faceLandmarkPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
                 face1Landmarks =
-                        new FaceDet(
-                                new RawFileLoader(
-                                        ResultActivity.this,
-                                        R.raw.shape_predictor_68_face_landmarks)
-                                        .load()
-                                        .getAbsolutePath())
-                                .detect(bitmapFace1)
-                                .get(FaceEnum.Face1Index)
-                                .getFaceLandmarks();
+                    new FaceDet(rawFile.getAbsolutePath())
+                                    .detect(bitmapFace1)
+                                    .get(FaceEnum.Face1Index)
+                                    .getFaceLandmarks();
+
+                face2Landmarks =
+                    new FaceDet(rawFile.getAbsolutePath())
+                                    .detect(bitmapFace2)
+                                    .get(FaceEnum.Face1Index)
+                                    .getFaceLandmarks();
+
 
                 for (Point p : face1Landmarks) canvasFace1.drawCircle(p.x, p.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
+                for (Point z : face2Landmarks) canvasFace2.drawCircle(z.x, z.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
 
                 return null;
             }
