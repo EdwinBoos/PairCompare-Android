@@ -37,5 +37,27 @@ public interface IEnum {
     {
         public static final int canvasRadius = 1;
     }
+    final class LandmarkCodesEnum
+    {
+
+        // Landmarks codes: Here's a good picture which describes it very well
+        // ( https://ibug.doc.ic.ac.uk/media/uploads/images/annotpics/figure_68_markup.jpg
+        // 0 - 16 shape of face
+        // 17 - 21 - right eyebrow
+        // 22 - 26 - left eyebrow
+        // 27 - 30 - Nose length
+        // 31 - 35 - Nose width
+        // 36 - 41 - Right eye
+        // 42 - 47 ... and so on
+        public static final int startShapeIndex = 16;
+        public static final int endShapeIndex = 68;
+        public static final int startChinIndex = 6;
+        public static final int endChinIndex = 11;
+        public static final int startRightEyeBrowIndex = 17;
+        public static final int endRightEyeBrowIndex = 22;
+
+
+
+    }
 
 }

@@ -17,6 +17,7 @@ import com.tzutalin.dlib.FaceDet;
 import java.io.File;
 import java.util.ArrayList;
 import influenz.de.paircompare.R;
+import influenz.de.paircompare.faciallandmark.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.RawFileLoader;
 
@@ -76,8 +77,11 @@ public class ResultActivity extends Activity implements IEnum
                                     .get(FaceEnum.Face2Index)
                                     .getFaceLandmarks();
 
+                ArrayList<Point> landmarks = new FacialLandmarkFactory()
+                                                .build(FacialLandmarkFactory.SHAPE_BUILD, face1Landmarks)
+                                                .retrieve();
 
-                for (Point p : face1Landmarks) canvasFace1.drawCircle(p.x, p.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
+                for (Point p : landmarks) canvasFace1.drawCircle(p.x, p.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
                 for (Point z : face2Landmarks) canvasFace2.drawCircle(z.x, z.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
 
                 return null;

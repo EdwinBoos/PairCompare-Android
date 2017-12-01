@@ -28,7 +28,7 @@ import influenz.de.paircompare.hybrid.DetectionBasedTracker;
 import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.ConverterFactory;
-import influenz.de.paircompare.util.EyeRegion;
+import influenz.de.paircompare.math.EyeRegion;
 import influenz.de.paircompare.util.RawFileLoader;
 
 public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
@@ -204,7 +204,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         rgba.release();
     }
 
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) 
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame)
     {
 
         rgba = inputFrame.rgba();

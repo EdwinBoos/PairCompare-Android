@@ -1,4 +1,4 @@
-package influenz.de.paircompare.util;
+package influenz.de.paircompare.math;
 import org.opencv.core.Rect;
 
 public final class EyeRegion
