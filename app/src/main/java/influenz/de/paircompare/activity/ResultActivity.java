@@ -3,7 +3,6 @@ package influenz.de.paircompare.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -88,8 +87,8 @@ public class ResultActivity extends Activity implements IEnum
                 ArrayList<Point> noseLatitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LATITUDE_BUILD).retrieve();
                 ArrayList<Point> noseLongitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LONGITUDE_BUILD).retrieve();
 
-                for (Point y : chinLandmarks) canvasFace1.drawCircle(y.x, y.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
-                for (Point z : face2Landmarks) canvasFace2.drawCircle(z.x, z.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
+                canvasFace1.drawLandmarksAsCircle(chinLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+                canvasFace2.drawLandmarksAsCircle(face2Landmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
 
                 return null;
             }

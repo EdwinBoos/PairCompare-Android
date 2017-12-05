@@ -2,13 +2,10 @@ package influenz.de.paircompare.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
-
 import java.util.ArrayList;
 
-/**
- * Created by e.boos on 05.12.2017.
- */
 
 public class LandmarksDrawer extends Canvas
 {
@@ -19,9 +16,9 @@ public class LandmarksDrawer extends Canvas
     }
 
 
-    public LandmarksDrawer drawLandmarksAsCircle(ArrayList<Point> chinLandmarks)
+    public LandmarksDrawer drawLandmarksAsCircle(ArrayList<Point> landmarks, int canvasRadius, Paint paint)
     {
-
+        for (Point p : landmarks) super.drawCircle(p.x, p.y, canvasRadius, paint);
         return this;
     }
 }
