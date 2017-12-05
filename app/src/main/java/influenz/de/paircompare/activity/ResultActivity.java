@@ -13,12 +13,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import com.tzutalin.dlib.FaceDet;
-
 import java.io.File;
 import java.util.ArrayList;
 import influenz.de.paircompare.R;
-import influenz.de.paircompare.faciallandmark.FacialLandmarkFactory;
+import influenz.de.paircompare.factory.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
+import influenz.de.paircompare.util.LandmarksDrawer;
 import influenz.de.paircompare.util.RawFileLoader;
 
 
@@ -58,8 +58,8 @@ public class ResultActivity extends Activity implements IEnum
             protected Void doInBackground(Void... params)
             {
                 Paint faceLandmarkPaint = new Paint();
-                Canvas canvasFace1 = new Canvas(bitmapFace1);
-                Canvas canvasFace2 = new Canvas(bitmapFace2);
+                LandmarksDrawer canvasFace1 = new LandmarksDrawer(bitmapFace1);
+                LandmarksDrawer canvasFace2 = new LandmarksDrawer(bitmapFace2);
                 File rawFile = new RawFileLoader(ResultActivity.this, R.raw.shape_predictor_68_face_landmarks).load();
                 faceLandmarkPaint.setColor(Color.GREEN);
                 faceLandmarkPaint.setStrokeWidth(ThicknessEnum.strokeWidth);
@@ -77,11 +77,18 @@ public class ResultActivity extends Activity implements IEnum
                                     .get(FaceEnum.Face2Index)
                                     .getFaceLandmarks();
 
-                ArrayList<Point> landmarks = new FacialLandmarkFactory()
-                                                .build(FacialLandmarkFactory.SHAPE_BUILD, face1Landmarks)
-                                                .retrieve();
+                FacialLandmarkFactory facialLandmarkFactory = new FacialLandmarkFactory(face1Landmarks);
 
-                for (Point p : landmarks) canvasFace1.drawCircle(p.x, p.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
+                ArrayList<Point> chinLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.CHIN_BUILD).retrieve();
+                ArrayList<Point> shapeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.SHAPE_BUILD).retrieve();
+                ArrayList<Point> rightEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BUILD).retrieve();
+                ArrayList<Point> leftEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BUILD).retrieve();
+                ArrayList<Point> rightEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BROW_BUILD).retrieve();
+                ArrayList<Point> leftEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BROW_BUILD).retrieve();
+                ArrayList<Point> noseLatitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LATITUDE_BUILD).retrieve();
+                ArrayList<Point> noseLongitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LONGITUDE_BUILD).retrieve();
+
+                for (Point y : chinLandmarks) canvasFace1.drawCircle(y.x, y.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
                 for (Point z : face2Landmarks) canvasFace2.drawCircle(z.x, z.y, RadiusEnum.canvasRadius, faceLandmarkPaint);
 
                 return null;

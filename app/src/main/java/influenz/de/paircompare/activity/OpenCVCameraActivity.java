@@ -27,7 +27,7 @@ import influenz.de.paircompare.R;
 import influenz.de.paircompare.hybrid.DetectionBasedTracker;
 import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
-import influenz.de.paircompare.util.ConverterFactory;
+import influenz.de.paircompare.factory.ConverterFactory;
 import influenz.de.paircompare.math.EyeRegion;
 import influenz.de.paircompare.util.RawFileLoader;
 
