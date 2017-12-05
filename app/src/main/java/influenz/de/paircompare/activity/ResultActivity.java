@@ -88,6 +88,14 @@ public class ResultActivity extends Activity implements IEnum
                 ArrayList<Point> noseLongitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LONGITUDE_BUILD).retrieve();
 
                 canvasFace1.drawLandmarksAsCircle(chinLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+                canvasFace1.drawLandmarksAsCircle(rightEyeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+                canvasFace1.drawLandmarksAsCircle(leftEyeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+                canvasFace1.drawLandmarksAsCircle(rightEyeBrowLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+                canvasFace1.drawLandmarksAsCircle(leftEyeBrowLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+                canvasFace1.drawLandmarksAsCircle(noseLatitudeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+                canvasFace1.drawLandmarksAsCircle(noseLongitudeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+
+
                 canvasFace2.drawLandmarksAsCircle(face2Landmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
 
                 return null;
