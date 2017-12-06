@@ -94,8 +94,6 @@ public class ResultActivity extends Activity implements IEnum
                 canvasFace1.drawLandmarksAsCircle(leftEyeBrowLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
                 canvasFace1.drawLandmarksAsCircle(noseLatitudeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
                 canvasFace1.drawLandmarksAsCircle(noseLongitudeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
-
-
                 canvasFace2.drawLandmarksAsCircle(face2Landmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
 
                 return null;
