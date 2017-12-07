@@ -10,7 +10,7 @@ public final class ConverterFactory
     public static final String BITMAP_2_MAT_ACTION = "bitmap2mat";
     public static final String MAT_2_BITMAP_ACTION = "mat2Bitmap";
 
-    public IConverter build(String action)
+    public IConverter build(final String action)
     {
         if(action.equalsIgnoreCase(this.BITMAP_2_MAT_ACTION))
         {

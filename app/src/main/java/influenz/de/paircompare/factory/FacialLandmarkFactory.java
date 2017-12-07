@@ -34,12 +34,12 @@ public final class FacialLandmarkFactory
     private final ArrayList<Point> facialLandmarks;
 
 
-    public FacialLandmarkFactory(ArrayList<Point> facialLandmarks)
+    public FacialLandmarkFactory(final ArrayList<Point> facialLandmarks)
     {
         this.facialLandmarks = facialLandmarks;
     }
 
-    public IFacialLandmark build(String type)
+    public IFacialLandmark build(final String type)
     {
         if(type.equalsIgnoreCase(SHAPE_BUILD))
             return new ShapeLandmarks(facialLandmarks);

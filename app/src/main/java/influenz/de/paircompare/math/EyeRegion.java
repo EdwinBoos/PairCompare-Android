@@ -6,7 +6,7 @@ public final class EyeRegion
 
     private final Rect face;
 
-    public EyeRegion(Rect face)
+    public EyeRegion(final Rect face)
     {
         this.face = face;
     }

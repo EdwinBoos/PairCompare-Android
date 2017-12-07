@@ -8,7 +8,7 @@ import influenz.de.paircompare.interfaces.IEnum;
 public class LeftEyeBrowLandmarks extends BaseLandmarks implements IEnum
 {
 
-    public LeftEyeBrowLandmarks(ArrayList<Point> facialLandmarks)
+    public LeftEyeBrowLandmarks(final ArrayList<Point> facialLandmarks)
     {
         super(facialLandmarks.subList(LandmarkCodesEnum.startLeftEyeBrowIndex, LandmarkCodesEnum.endLeftEyeBrowIndex));
     }

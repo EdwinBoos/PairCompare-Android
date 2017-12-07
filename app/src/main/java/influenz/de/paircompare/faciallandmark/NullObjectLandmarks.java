@@ -8,7 +8,7 @@ import influenz.de.paircompare.interfaces.IFacialLandmark;
 public final class NullObjectLandmarks implements IFacialLandmark {
 
 
-    public NullObjectLandmarks(ArrayList<Point> facialLandmarks) { }
+    public NullObjectLandmarks(final ArrayList<Point> facialLandmarks) { }
 
     @Override
     public <T> ArrayList<T> retrieve()

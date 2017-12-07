@@ -15,6 +15,7 @@ import com.tzutalin.dlib.FaceDet;
 import java.io.File;
 import java.util.ArrayList;
 import influenz.de.paircompare.R;
+import influenz.de.paircompare.faciallandmark.BaseLandmarks;
 import influenz.de.paircompare.factory.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.LandmarksDrawer;

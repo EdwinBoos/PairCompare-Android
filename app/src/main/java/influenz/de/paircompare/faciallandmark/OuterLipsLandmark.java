@@ -10,7 +10,7 @@ import influenz.de.paircompare.interfaces.IEnum;
 public class OuterLipsLandmark extends BaseLandmarks implements IEnum
 {
 
-    public OuterLipsLandmark(ArrayList<Point> facialLandmarks)
+    public OuterLipsLandmark(final ArrayList<Point> facialLandmarks)
     {
         super(facialLandmarks.subList(LandmarkCodesEnum.startOuterLipIndex, LandmarkCodesEnum.endOuterLipIndex));
     }

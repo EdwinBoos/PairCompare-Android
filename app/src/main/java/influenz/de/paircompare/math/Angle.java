@@ -11,7 +11,7 @@ public class Angle
     private final Point p2;
 
 
-    public Angle(final Point p1, Point center, Point p2)
+    public Angle(final Point p1, final Point center, final Point p2)
     {
         this.p1 = p1;
         this.center = center;

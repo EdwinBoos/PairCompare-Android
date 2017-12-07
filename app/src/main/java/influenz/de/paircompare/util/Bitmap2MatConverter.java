@@ -10,7 +10,7 @@ public final class Bitmap2MatConverter implements IConverter
 {
 
     @Override
-    public Object convert(Mat mat, Bitmap bitmap)
+    public Object convert(final Mat mat, final Bitmap bitmap)
     {
         Utils.bitmapToMat(bitmap, mat);
         return mat;

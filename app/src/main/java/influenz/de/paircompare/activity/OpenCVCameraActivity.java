@@ -29,6 +29,7 @@ import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.factory.ConverterFactory;
 import influenz.de.paircompare.math.EyeRegion;
+import influenz.de.paircompare.math.FaceRegion;
 import influenz.de.paircompare.util.RawFileLoader;
 
 public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
@@ -36,7 +37,6 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
     private Mat rgba;
     private Mat gray;
-    private Rect[] facesArray;
     private Bitmap bitmapFace1;
     private Bitmap bitmapFace2;
     private int facesFound = 0;
@@ -120,8 +120,8 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
     {
 
         IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
-        Mat roiFace1 = gray.submat(facesArray[0]);
-        Mat roiFace2 = gray.submat(facesArray[0]); // TODO: 1 when prodcutive
+        Mat roiFace1 = gray.submat(faces.toArray()[0]);
+        Mat roiFace2 = gray.submat(faces.toArray()[0]); // TODO: 1 when prodcutive
 
         bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
         bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
@@ -178,8 +178,8 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         if (!OpenCVLoader.initDebug())
         {
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, loaderCallback);
-
-        } else {
+        } else
+        {
             loaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
 
@@ -211,20 +211,18 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         gray = inputFrame.gray();
         faces = new MatOfRect();
         nativeFaceDetector.detect(gray, faces);
-        facesArray = faces.toArray();
-        facesFound = facesArray.length;
+        facesFound = faces.toArray().length;
         int facesCounter = 0;
 
-        for (Rect nextFace : facesArray)
+        for (Rect nextFace : faces.toArray())
         {
             facesCounter++;
 
             EyeRegion eyeRegion = new EyeRegion(nextFace);
+            FaceRegion faceRegion = new FaceRegion(nextFace);
             Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), ScalarEnum.scalarFace, ThicknessEnum.rectAngleFace);
-            int xCenter = (nextFace.x + nextFace.width + nextFace.x) / 2;
-            int yCenter = (nextFace.y + nextFace.y + nextFace.height) / 2;
-            Point center = new Point(xCenter, yCenter);
-            Imgproc.putText(  rgba, "Face " + facesCounter, new Point(center.x + 20, center.y + 40),
+            Point center = faceRegion.computeCenterPoint();
+            Imgproc.putText(  rgba, "Face " + facesCounter, new Point(center.x, center.y ),
                               Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
 
             Rect eyeAreaRight = eyeRegion.computeRightEyeRegion();
@@ -244,7 +242,6 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
                 photoButtonView.setEnabled((facesFound > FaceEnum.minFacesFound));
             }
         });
-
 
         return rgba;
     }

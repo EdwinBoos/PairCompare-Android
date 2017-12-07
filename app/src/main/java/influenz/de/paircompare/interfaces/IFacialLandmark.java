@@ -8,6 +8,4 @@ public interface IFacialLandmark
 
     public <T> ArrayList<T> retrieve();
 
-
-
 }

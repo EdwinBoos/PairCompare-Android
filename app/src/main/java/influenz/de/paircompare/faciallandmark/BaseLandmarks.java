@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import influenz.de.paircompare.interfaces.IFacialLandmark;
 
-public class BaseLandmarks extends ArrayList<Point> implements IFacialLandmark
+public abstract class BaseLandmarks extends ArrayList<Point> implements IFacialLandmark
 {
 
     public BaseLandmarks(List<Point> landmarks)

@@ -10,13 +10,13 @@ import java.util.ArrayList;
 public class LandmarksDrawer extends Canvas
 {
 
-    public LandmarksDrawer(Bitmap bitmap)
+    public LandmarksDrawer(final Bitmap bitmap)
     {
         super(bitmap);
     }
 
 
-    public LandmarksDrawer drawLandmarksAsCircle(ArrayList<Point> landmarks, int canvasRadius, Paint paint)
+    public LandmarksDrawer drawLandmarksAsCircle(final ArrayList<Point> landmarks, final int canvasRadius, final Paint paint)
     {
         for (Point p : landmarks) super.drawCircle(p.x, p.y, canvasRadius, paint);
         return this;

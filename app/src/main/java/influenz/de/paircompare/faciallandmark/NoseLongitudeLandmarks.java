@@ -7,7 +7,7 @@ import influenz.de.paircompare.interfaces.IEnum;
 public class NoseLongitudeLandmarks extends BaseLandmarks implements IEnum
 {
 
-    public NoseLongitudeLandmarks(ArrayList<Point> facialLandmarks)
+    public NoseLongitudeLandmarks(final ArrayList<Point> facialLandmarks)
     {
         super(facialLandmarks.subList(LandmarkCodesEnum.startNoseLongitudeIndex, LandmarkCodesEnum.endNoseLongitudeIndex));
     }
