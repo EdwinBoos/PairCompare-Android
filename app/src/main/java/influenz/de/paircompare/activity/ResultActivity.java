@@ -11,10 +11,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.tzutalin.dlib.FaceDet;
 import java.io.File;
 import java.util.ArrayList;
 import influenz.de.paircompare.R;
+import influenz.de.paircompare.facefeatures.Chin;
 import influenz.de.paircompare.faciallandmark.BaseLandmarks;
 import influenz.de.paircompare.factory.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
@@ -80,7 +83,6 @@ public class ResultActivity extends Activity implements IEnum
                 FacialLandmarkFactory facialLandmarkFactory = new FacialLandmarkFactory(face1Landmarks);
 
                 ArrayList<Point> chinLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.CHIN_BUILD).retrieve();
-                ArrayList<Point> shapeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.SHAPE_BUILD).retrieve();
                 ArrayList<Point> rightEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BUILD).retrieve();
                 ArrayList<Point> leftEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BUILD).retrieve();
                 ArrayList<Point> rightEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BROW_BUILD).retrieve();
@@ -96,6 +98,9 @@ public class ResultActivity extends Activity implements IEnum
                 canvasFace1.drawLandmarksAsCircle(noseLatitudeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
                 canvasFace1.drawLandmarksAsCircle(noseLongitudeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
                 canvasFace2.drawLandmarksAsCircle(face2Landmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
+
+                Chin chin = new Chin(chinLandmarks);
+
 
                 return null;
             }

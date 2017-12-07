@@ -2,7 +2,6 @@ package influenz.de.paircompare.math;
 
 import android.graphics.Point;
 
-
 public class Angle
 {
 
@@ -35,7 +34,5 @@ public class Angle
         if (angle > Math.PI) angle = 2 * Math.PI - angle;
         return angle;
     }
-
-
 
 }
