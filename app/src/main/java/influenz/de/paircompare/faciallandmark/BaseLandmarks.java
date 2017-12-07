@@ -8,7 +8,7 @@ import influenz.de.paircompare.interfaces.IFacialLandmark;
 public abstract class BaseLandmarks extends ArrayList<Point> implements IFacialLandmark
 {
 
-    public BaseLandmarks(List<Point> landmarks)
+    public BaseLandmarks(final List<Point> landmarks)
     {
         super(landmarks);
     }
