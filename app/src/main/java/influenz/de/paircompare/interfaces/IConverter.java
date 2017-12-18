@@ -8,6 +8,6 @@ import org.opencv.core.Mat;
 public interface IConverter
 {
 
-    public Object convert(Mat mat, Bitmap bitmap);
+    public Object convert(final Mat mat, final Bitmap bitmap);
 
 }

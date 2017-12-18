@@ -22,8 +22,8 @@ public class Angle
         Point transformedP1 = new Point(p1.x - center.x, p1.y - center.y);
         Point transformedP2 = new Point(p2.x - center.x, p2.y - center.y);
 
-        double angleToP1 = Math.atan2(transformedP1.y, transformedP1.x);
-        double angleToP2 = Math.atan2(transformedP2.y, transformedP2.x);
+        final double angleToP1 = Math.atan2(transformedP1.y, transformedP1.x);
+        final double angleToP2 = Math.atan2(transformedP2.y, transformedP2.x);
 
         return normaliseAngle(angleToP2 - angleToP1);
     }

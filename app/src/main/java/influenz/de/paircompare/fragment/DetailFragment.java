@@ -39,7 +39,7 @@ public class DetailFragment extends Fragment implements Observer, IEnum
     private ArrayList<Point> face2Landmarks;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
     {
         final View view =  inflater.inflate(R.layout.fragment_detail, container, false);
 
@@ -62,9 +62,9 @@ public class DetailFragment extends Fragment implements Observer, IEnum
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    public void update(Observable observer, Object argument)
+    public void update(final Observable observer, final Object argument)
     {
-        BitmapsObservable bitmapsObservable = (BitmapsObservable) observer;
+        final BitmapsObservable bitmapsObservable = (BitmapsObservable) observer;
         bitmapFace1 = bitmapsObservable.getBitmapArrayList().get(0);
         bitmapFace2 = bitmapsObservable.getBitmapArrayList().get(1);
 
@@ -75,15 +75,15 @@ public class DetailFragment extends Fragment implements Observer, IEnum
         {
 
             @Override
-            protected Void doInBackground(Void... params)
+            protected Void doInBackground(final Void... params)
             {
 
                 progressBarView.setVisibility(View.VISIBLE);
 
-                Paint faceLandmarkPaint = new Paint();
-                LandmarksDrawer canvasFace1 = new LandmarksDrawer(bitmapFace1);
-                LandmarksDrawer canvasFace2 = new LandmarksDrawer(bitmapFace2);
-                File rawFile = new RawFileLoader(getContext(), R.raw.shape_predictor_68_face_landmarks).load();
+                final Paint faceLandmarkPaint = new Paint();
+                final LandmarksDrawer canvasFace1 = new LandmarksDrawer(bitmapFace1);
+                final LandmarksDrawer canvasFace2 = new LandmarksDrawer(bitmapFace2);
+                final File rawFile = new RawFileLoader(getContext(), R.raw.shape_predictor_68_face_landmarks).load();
 
                 faceLandmarkPaint.setColor(Color.GREEN);
                 faceLandmarkPaint.setStrokeWidth(ThicknessEnum.strokeWidth);
@@ -101,15 +101,15 @@ public class DetailFragment extends Fragment implements Observer, IEnum
                                 .get(FaceEnum.Face2Index)
                                 .getFaceLandmarks();
 
-                FacialLandmarkFactory facialLandmarkFactory = new FacialLandmarkFactory(face1Landmarks);
+                final FacialLandmarkFactory facialLandmarkFactory = new FacialLandmarkFactory(face1Landmarks);
 
-                ArrayList<Point> chinLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.CHIN_BUILD).retrieve();
-                ArrayList<Point> rightEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BUILD).retrieve();
-                ArrayList<Point> leftEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BUILD).retrieve();
-                ArrayList<Point> rightEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BROW_BUILD).retrieve();
-                ArrayList<Point> leftEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BROW_BUILD).retrieve();
-                ArrayList<Point> noseLatitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LATITUDE_BUILD).retrieve();
-                ArrayList<Point> noseLongitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LONGITUDE_BUILD).retrieve();
+                final ArrayList<Point> chinLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.CHIN_BUILD).retrieve();
+                final ArrayList<Point> rightEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BUILD).retrieve();
+                final ArrayList<Point> leftEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BUILD).retrieve();
+                final ArrayList<Point> rightEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BROW_BUILD).retrieve();
+                final ArrayList<Point> leftEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BROW_BUILD).retrieve();
+                final ArrayList<Point> noseLatitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LATITUDE_BUILD).retrieve();
+                final ArrayList<Point> noseLongitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LONGITUDE_BUILD).retrieve();
 
                 canvasFace1.drawLandmarksAsCircle(chinLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
                 canvasFace1.drawLandmarksAsCircle(rightEyeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
@@ -120,14 +120,14 @@ public class DetailFragment extends Fragment implements Observer, IEnum
                 canvasFace1.drawLandmarksAsCircle(noseLongitudeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
                 canvasFace2.drawLandmarksAsCircle(face2Landmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
 
-                double chinAngle = new Chin(chinLandmarks).getAngleInDegrees();
+                final double chinAngle = new Chin(chinLandmarks).getAngleInDegrees();
                 canvasFace1.drawText("chinAngle " + chinAngle , 50,10, faceLandmarkPaint);
 
                 return null;
             }
 
             @Override
-            protected void onPostExecute(Void unused)
+            protected void onPostExecute(final Void unused)
             {
                 imageViewFace1.setImageBitmap(bitmapFace1);
                 imageViewFace2.setImageBitmap(bitmapFace2);

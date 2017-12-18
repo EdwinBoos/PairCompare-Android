@@ -55,15 +55,15 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     private Switch switchView;
     private PopupWindow popupWindow;
 
-    private BaseLoaderCallback loaderCallback = new BaseLoaderCallback(this)
+    private final BaseLoaderCallback loaderCallback = new BaseLoaderCallback(this)
     {
         @Override
-        public void onManagerConnected(int status)
+        public void onManagerConnected(final int status)
         {
             if (status == LoaderCallbackInterface.SUCCESS)
             {
                 System.loadLibrary("detectionBasedTracker");
-                RawFileLoader haarCascadeFaceLoader = new RawFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt);
+                final RawFileLoader haarCascadeFaceLoader = new RawFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt);
                 nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
                 haarCascadeFaceLoader.deleteCascadeDir();
                 openCvCameraView.enableView();
@@ -78,12 +78,12 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    public void onCreate(final Bundle savedInstanceState)
     {
 
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         setContentView(R.layout.activity_opencvcamera);
 
         openCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_view);
@@ -96,7 +96,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         detailFragment = new DetailFragment();
         detailFragment.forceCreateView(getSupportFragmentManager());
 
-        View customView = inflater.inflate(R.layout.popup_window, null);
+        final View customView = inflater.inflate(R.layout.popup_window, null);
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
         imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
         popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -124,12 +124,12 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         pauseCamera();
     }
 
-    public void handleTakePhotoButtonPress(View view)
+    public void handleTakePhotoButtonPress(final View view)
     {
 
-        IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
-        Mat roiFace1 = gray.submat(faces.toArray()[0]);
-        Mat roiFace2 = gray.submat(faces.toArray()[0]);
+        final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
+        final Mat roiFace1 = gray.submat(faces.toArray()[0]);
+        final Mat roiFace2 = gray.submat(faces.toArray()[0]);
 
         bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
         bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
@@ -148,12 +148,12 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
     }
 
-    public void handleSwitchPress(View view)
+    public void handleSwitchPress(final View view)
     {
         photoButtonView.setEnabled(false);
     }
 
-    public void handleRepeatButtonPress(View view)
+    public void handleRepeatButtonPress(final View view)
     {
         switchView.setEnabled(false);
         photoButtonView.setEnabled(false);
@@ -162,16 +162,18 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         popupWindow.dismiss();
     }
 
-    public void handleAcceptButtonPress(View view)
+    public void handleAcceptButtonPress(final View view)
     {
-        popupWindow.dismiss();
-        ArrayList<Bitmap> bitmaps = new ArrayList<>();
+
+        final ArrayList<Bitmap> bitmaps = new ArrayList<>();
         bitmaps.add(bitmapFace1);
         bitmaps.add(bitmapFace2);
 
-        BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
+        final BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
         bitmapsObservable.addObserver(detailFragment);
         bitmapsObservable.notifyObservers();
+
+        popupWindow.dismiss();
 
         getSupportFragmentManager().beginTransaction()
                                    .addToBackStack(null)
@@ -179,7 +181,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
                                    .commit();
     }
 
-    public void handleFlipCameraButtonPress(View view)
+    public void handleFlipCameraButtonPress(final View view)
     {
         pauseCamera();
         openCvCameraView.setCameraIndex(
@@ -209,7 +211,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
     }
 
-    public void onCameraViewStarted(int width, int height)
+    public void onCameraViewStarted(final int width, final int height)
     {
         gray = new Mat();
         rgba = new Mat();
@@ -221,7 +223,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         rgba.release();
     }
 
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame)
+    public Mat onCameraFrame(final CameraBridgeViewBase.CvCameraViewFrame inputFrame)
     {
 
         rgba = inputFrame.rgba();
@@ -229,21 +231,21 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         faces = new MatOfRect();
         nativeFaceDetector.detect(gray, faces);
         facesFound = faces.toArray().length;
-        int facesCounter = 0;
+        int  facesCounter = 0;
 
-        for (Rect nextFace : faces.toArray())
+        for (final Rect nextFace : faces.toArray())
         {
             facesCounter++;
 
-            EyeRegion eyeRegion = new EyeRegion(nextFace);
-            FaceRegion faceRegion = new FaceRegion(nextFace);
+            final EyeRegion eyeRegion = new EyeRegion(nextFace);
+            final FaceRegion faceRegion = new FaceRegion(nextFace);
             Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), ScalarEnum.scalarFace, ThicknessEnum.rectAngleFace);
-            Point center = faceRegion.computeCenterPoint();
+            final Point center = faceRegion.computeCenterPoint();
             Imgproc.putText(  rgba, "Face " + facesCounter, new Point(center.x, center.y ),
                               Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
 
-            Rect eyeAreaRight = eyeRegion.computeRightEyeRegion();
-            Rect eyeAreaLeft = eyeRegion.computeLeftEyeRegion();
+            final Rect eyeAreaRight = eyeRegion.computeRightEyeRegion();
+            final Rect eyeAreaLeft = eyeRegion.computeLeftEyeRegion();
 
             Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
             Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
