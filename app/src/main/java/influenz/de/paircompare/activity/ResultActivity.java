@@ -1,5 +1,6 @@
 package influenz.de.paircompare.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,14 +12,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.tzutalin.dlib.FaceDet;
 import java.io.File;
 import java.util.ArrayList;
 import influenz.de.paircompare.R;
-import influenz.de.paircompare.facefeatures.Chin;
-import influenz.de.paircompare.faciallandmark.BaseLandmarks;
+import influenz.de.paircompare.facefeature.Chin;
 import influenz.de.paircompare.factory.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.util.LandmarksDrawer;
@@ -37,6 +36,7 @@ public class ResultActivity extends Activity implements IEnum
     private ProgressBar progressBarView;
 
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -99,8 +99,8 @@ public class ResultActivity extends Activity implements IEnum
                 canvasFace1.drawLandmarksAsCircle(noseLongitudeLandmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
                 canvasFace2.drawLandmarksAsCircle(face2Landmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
 
-                Chin chin = new Chin(chinLandmarks);
-
+                double chinAngle = new Chin(chinLandmarks).getAngleInDegrees();
+                canvasFace1.drawText("chinAngle " + chinAngle , 50,10, faceLandmarkPaint);
 
                 return null;
             }

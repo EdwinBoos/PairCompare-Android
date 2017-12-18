@@ -1,4 +1,4 @@
-package influenz.de.paircompare.facefeatures;
+package influenz.de.paircompare.facefeature;
 
 import android.graphics.Point;
 import java.util.ArrayList;
