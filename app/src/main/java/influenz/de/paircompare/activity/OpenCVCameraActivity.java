@@ -1,6 +1,5 @@
 package influenz.de.paircompare.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -23,7 +22,11 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+
 import influenz.de.paircompare.R;
+import influenz.de.paircompare.fragment.DetailFragment;
 import influenz.de.paircompare.hybrid.DetectionBasedTracker;
 import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
@@ -44,6 +47,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     private DetectionBasedTracker nativeFaceDetector;
     private Button photoButtonView;
     private Button flipCameraButtonView;
+    private DetailFragment detailFragment;
     private MatOfRect faces;
     private CameraBridgeViewBase openCvCameraView;
     private ImageView imageViewFace1;
@@ -89,11 +93,13 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         flipCameraButtonView = (Button) findViewById(R.id.flip_camera_id);
         switchView = (Switch) findViewById(R.id.switch_id);
 
+        detailFragment = new DetailFragment();
+        detailFragment.forceCreateView(getSupportFragmentManager());
+
         View customView = inflater.inflate(R.layout.popup_window, null);
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
         imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
         popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setOutsideTouchable(false);
 
     }
 
@@ -123,7 +129,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
         IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
         Mat roiFace1 = gray.submat(faces.toArray()[0]);
-        Mat roiFace2 = gray.submat(faces.toArray()[0]); // TODO: 1 when prodcutive
+        Mat roiFace2 = gray.submat(faces.toArray()[0]);
 
         bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
         bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
@@ -158,17 +164,19 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
     public void handleAcceptButtonPress(View view)
     {
-
         popupWindow.dismiss();
-        Intent intent = new Intent(OpenCVCameraActivity.this, ResultActivity.class);
-        intent.putExtra(IntentKeyEnum.face1_key, bitmapFace1);
-        intent.putExtra(IntentKeyEnum.face2_key, bitmapFace2);
-        startActivity(intent);
+        ArrayList<Bitmap> bitmaps = new ArrayList<>();
+        bitmaps.add(bitmapFace1);
+        bitmaps.add(bitmapFace2);
 
-        BitmapsObservable bitmapsObservable = new BitmapsObservable();
-        //bitmapsObservable.addObserver(resultFragment);
-
+        BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
+        bitmapsObservable.addObserver(detailFragment);
         bitmapsObservable.notifyObservers();
+
+        getSupportFragmentManager().beginTransaction()
+                                   .addToBackStack(null)
+                                   .replace(R.id.container_id, detailFragment)
+                                   .commit();
     }
 
     public void handleFlipCameraButtonPress(View view)

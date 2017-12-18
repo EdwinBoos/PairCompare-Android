@@ -3,6 +3,7 @@ package influenz.de.paircompare.math;
 
 public class Scope
 {
+
     public Scope()
     {
 
