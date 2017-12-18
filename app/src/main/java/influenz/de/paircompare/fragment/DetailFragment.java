@@ -64,7 +64,7 @@ public class DetailFragment extends Fragment implements Observer, IEnum
     @Override
     public void update(Observable observer, Object argument)
     {
-        final BitmapsObservable bitmapsObservable = (BitmapsObservable) observer;
+        BitmapsObservable bitmapsObservable = (BitmapsObservable) observer;
         bitmapFace1 = bitmapsObservable.getBitmapArrayList().get(0);
         bitmapFace2 = bitmapsObservable.getBitmapArrayList().get(1);
 
