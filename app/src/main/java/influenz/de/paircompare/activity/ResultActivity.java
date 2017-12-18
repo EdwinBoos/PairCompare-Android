@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
 import com.tzutalin.dlib.FaceDet;
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ public class ResultActivity extends Activity implements IEnum
     private Bitmap bitmapFace1;
     private Bitmap bitmapFace2;
     private ProgressBar progressBarView;
-
 
     @SuppressLint("StaticFieldLeak")
     @Override

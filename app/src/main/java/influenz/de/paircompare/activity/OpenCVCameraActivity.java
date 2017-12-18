@@ -1,9 +1,9 @@
 package influenz.de.paircompare.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -30,9 +30,10 @@ import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.factory.ConverterFactory;
 import influenz.de.paircompare.math.EyeRegion;
 import influenz.de.paircompare.math.FaceRegion;
+import influenz.de.paircompare.observer.BitmapsObservable;
 import influenz.de.paircompare.util.RawFileLoader;
 
-public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
+public class OpenCVCameraActivity extends FragmentActivity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
 {
 
     private Mat rgba;
@@ -70,6 +71,7 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
             }
         }
     };
+
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -156,11 +158,17 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
 
     public void handleAcceptButtonPress(View view)
     {
+
         popupWindow.dismiss();
         Intent intent = new Intent(OpenCVCameraActivity.this, ResultActivity.class);
         intent.putExtra(IntentKeyEnum.face1_key, bitmapFace1);
         intent.putExtra(IntentKeyEnum.face2_key, bitmapFace2);
         startActivity(intent);
+
+        BitmapsObservable bitmapsObservable = new BitmapsObservable();
+        //bitmapsObservable.addObserver(resultFragment);
+
+        bitmapsObservable.notifyObservers();
     }
 
     public void handleFlipCameraButtonPress(View view)
@@ -178,7 +186,8 @@ public class OpenCVCameraActivity extends Activity implements CameraBridgeViewBa
         if (!OpenCVLoader.initDebug())
         {
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, loaderCallback);
-        } else
+        }
+        else
         {
             loaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }

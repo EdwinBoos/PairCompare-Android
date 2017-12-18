@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:opencv="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/primary_dark_material_dark_1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary_dark_material_dark_1"
     tools:context=".activity.OpenCVCameraActivity">
 
     <org.opencv.android.JavaCameraView
@@ -44,22 +44,21 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="12dp"
-        android:textColor="@color/colorAccent"
         android:drawableLeft="@android:drawable/ic_menu_rotate"
         android:onClick="handleFlipCameraButtonPress"
-        android:text="@string/flip_camera" />
+        android:text="@string/flip_camera"
+        android:textColor="@color/colorAccent" />
 
     <Button
         android:id="@+id/photo_button_id"
         android:layout_width="wrap_content"
-        android:textColor="@color/colorAccent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/flip_camera_id"
         android:layout_alignStart="@+id/flip_camera_id"
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:enabled="false"
         android:onClick="handleTakePhotoButtonPress"
-        android:text="@string/take_photo" />
-
+        android:text="@string/take_photo"
+        android:textColor="@color/colorAccent" />
 
 </RelativeLayout>
