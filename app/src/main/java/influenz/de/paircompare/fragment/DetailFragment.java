@@ -51,7 +51,7 @@ public class DetailFragment extends Fragment implements Observer, IEnum
     }
 
 
-    public void forceCreateView(FragmentManager supportFragmentManager)
+    public void forceCreateView(final FragmentManager supportFragmentManager)
     {
         supportFragmentManager
                 .beginTransaction()

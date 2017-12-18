@@ -9,7 +9,7 @@ public final class BitmapsObservable extends Observable
 
     private final ArrayList<Bitmap> bitmapArrayList;
 
-    public BitmapsObservable(ArrayList<Bitmap> bitmapArrayList)
+    public BitmapsObservable(final ArrayList<Bitmap> bitmapArrayList)
     {
         this.bitmapArrayList = bitmapArrayList;
     }
