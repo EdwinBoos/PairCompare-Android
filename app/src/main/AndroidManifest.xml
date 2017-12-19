@@ -15,8 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ResultActivity" android:screenOrientation="landscape" >
-        </activity>
     </application>
     <supports-screens
         android:resizeable="true"

@@ -8,7 +8,6 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import influenz.de.paircompare.R;
 import influenz.de.paircompare.facefeature.Chin;
 import influenz.de.paircompare.factory.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
+import influenz.de.paircompare.interfaces.IFragmentCreatedListener;
 import influenz.de.paircompare.observer.BitmapsObservable;
 import influenz.de.paircompare.util.LandmarksDrawer;
 import influenz.de.paircompare.util.RawFileLoader;
@@ -47,18 +47,12 @@ public class DetailFragment extends Fragment implements Observer, IEnum
         imageViewFace2 = (ImageView) view.findViewById(R.id.face_2_id);
         progressBarView = (ProgressBar) view.findViewById(R.id.progressbar_id);
 
+        IFragmentCreatedListener callback = (IFragmentCreatedListener) getActivity();
+        callback.handleFragmentViewCreated();
+
         return view;
     }
 
-
-    public void forceCreateView(final FragmentManager supportFragmentManager)
-    {
-        supportFragmentManager
-                .beginTransaction()
-                .detach(this)
-                .attach(this)
-                .commitAllowingStateLoss();
-    }
 
     @SuppressLint("StaticFieldLeak")
     @Override
@@ -102,7 +96,6 @@ public class DetailFragment extends Fragment implements Observer, IEnum
                                 .getFaceLandmarks();
 
                 final FacialLandmarkFactory facialLandmarkFactory = new FacialLandmarkFactory(face1Landmarks);
-
                 final ArrayList<Point> chinLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.CHIN_BUILD).retrieve();
                 final ArrayList<Point> rightEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BUILD).retrieve();
                 final ArrayList<Point> leftEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BUILD).retrieve();
@@ -121,7 +114,7 @@ public class DetailFragment extends Fragment implements Observer, IEnum
                 canvasFace2.drawLandmarksAsCircle(face2Landmarks, RadiusEnum.canvasRadius, faceLandmarkPaint );
 
                 final double chinAngle = new Chin(chinLandmarks).getAngleInDegrees();
-                canvasFace1.drawText("chinAngle " + chinAngle , 50,10, faceLandmarkPaint);
+                canvasFace1.drawText("chinAngle " + chinAngle , 100,10, faceLandmarkPaint);
 
                 return null;
             }

@@ -35,7 +35,7 @@ public interface IEnum {
     }
     final class RadiusEnum
     {
-        public static final int canvasRadius = 1;
+        public static final int canvasRadius = 3;
     }
     final class LandmarkCodesEnum
     {

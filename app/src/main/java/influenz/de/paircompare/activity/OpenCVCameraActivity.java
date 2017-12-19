@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Switch;
+import android.widget.Toast;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
@@ -31,12 +33,13 @@ import influenz.de.paircompare.hybrid.DetectionBasedTracker;
 import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.factory.ConverterFactory;
+import influenz.de.paircompare.interfaces.IFragmentCreatedListener;
 import influenz.de.paircompare.math.EyeRegion;
 import influenz.de.paircompare.math.FaceRegion;
 import influenz.de.paircompare.observer.BitmapsObservable;
 import influenz.de.paircompare.util.RawFileLoader;
 
-public class OpenCVCameraActivity extends FragmentActivity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum
+public class OpenCVCameraActivity extends FragmentActivity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum, IFragmentCreatedListener
 {
 
     private Mat rgba;
@@ -94,8 +97,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         switchView = (Switch) findViewById(R.id.switch_id);
 
         detailFragment = new DetailFragment();
-        detailFragment.forceCreateView(getSupportFragmentManager());
-
         final View customView = inflater.inflate(R.layout.popup_window, null);
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
         imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
@@ -164,14 +165,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
     public void handleAcceptButtonPress(final View view)
     {
-
-        final ArrayList<Bitmap> bitmaps = new ArrayList<>();
-        bitmaps.add(bitmapFace1);
-        bitmaps.add(bitmapFace2);
-
-        final BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
-        bitmapsObservable.addObserver(detailFragment);
-        bitmapsObservable.notifyObservers();
 
         popupWindow.dismiss();
 
@@ -265,4 +258,15 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         return rgba;
     }
 
+    @Override
+    public void handleFragmentViewCreated()
+    {
+        final ArrayList<Bitmap> bitmaps = new ArrayList<>();
+        bitmaps.add(bitmapFace1);
+        bitmaps.add(bitmapFace2);
+
+        final BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
+        bitmapsObservable.addObserver(detailFragment);
+        bitmapsObservable.notifyObservers();
+    }
 }
