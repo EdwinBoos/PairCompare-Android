@@ -24,10 +24,10 @@ import influenz.de.paircompare.factory.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.interfaces.IFragmentCreatedListener;
 import influenz.de.paircompare.observer.BitmapsObservable;
-import influenz.de.paircompare.util.LandmarksDrawer;
+import influenz.de.paircompare.util.LandmarksCanvas;
 import influenz.de.paircompare.util.RawFileLoader;
 
-public class DetailFragment extends Fragment implements Observer, IEnum
+public class AnalysisFragment extends Fragment implements Observer, IEnum
 {
 
     private Bitmap bitmapFace1;
@@ -41,14 +41,14 @@ public class DetailFragment extends Fragment implements Observer, IEnum
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
     {
-        final View view =  inflater.inflate(R.layout.fragment_detail, container, false);
+        final View view =  inflater.inflate(R.layout.fragment_analysis, container, false);
 
         imageViewFace1 = (ImageView) view.findViewById(R.id.face_1_id);
         imageViewFace2 = (ImageView) view.findViewById(R.id.face_2_id);
         progressBarView = (ProgressBar) view.findViewById(R.id.progressbar_id);
 
         IFragmentCreatedListener callback = (IFragmentCreatedListener) getActivity();
-        callback.handleFragmentViewCreated();
+        callback.onFragmentReady();
 
         return view;
     }
@@ -75,8 +75,8 @@ public class DetailFragment extends Fragment implements Observer, IEnum
                 progressBarView.setVisibility(View.VISIBLE);
 
                 final Paint faceLandmarkPaint = new Paint();
-                final LandmarksDrawer canvasFace1 = new LandmarksDrawer(bitmapFace1);
-                final LandmarksDrawer canvasFace2 = new LandmarksDrawer(bitmapFace2);
+                final LandmarksCanvas canvasFace1 = new LandmarksCanvas(bitmapFace1);
+                final LandmarksCanvas canvasFace2 = new LandmarksCanvas(bitmapFace2);
                 final File rawFile = new RawFileLoader(getContext(), R.raw.shape_predictor_68_face_landmarks).load();
 
                 faceLandmarkPaint.setColor(Color.GREEN);

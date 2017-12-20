@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -28,7 +27,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 
 import influenz.de.paircompare.R;
-import influenz.de.paircompare.fragment.DetailFragment;
+import influenz.de.paircompare.fragment.AnalysisFragment;
 import influenz.de.paircompare.hybrid.DetectionBasedTracker;
 import influenz.de.paircompare.interfaces.IConverter;
 import influenz.de.paircompare.interfaces.IEnum;
@@ -50,7 +49,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     private DetectionBasedTracker nativeFaceDetector;
     private Button photoButtonView;
     private Button flipCameraButtonView;
-    private DetailFragment detailFragment;
+    private AnalysisFragment analysisFragment;
     private MatOfRect faces;
     private CameraBridgeViewBase openCvCameraView;
     private ImageView imageViewFace1;
@@ -96,7 +95,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         flipCameraButtonView = (Button) findViewById(R.id.flip_camera_id);
         switchView = (Switch) findViewById(R.id.switch_id);
 
-        detailFragment = new DetailFragment();
+        analysisFragment = new AnalysisFragment();
         final View customView = inflater.inflate(R.layout.popup_window, null);
         imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
         imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
@@ -170,7 +169,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
         getSupportFragmentManager().beginTransaction()
                                    .addToBackStack(null)
-                                   .replace(R.id.container_id, detailFragment)
+                                   .replace(R.id.container_id, analysisFragment)
                                    .commit();
     }
 
@@ -216,6 +215,20 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         rgba.release();
     }
 
+
+    @Override
+    public void onFragmentReady()
+    {
+        final ArrayList<Bitmap> bitmaps = new ArrayList<>();
+        bitmaps.add(bitmapFace1);
+        bitmaps.add(bitmapFace2);
+
+        final BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
+        bitmapsObservable.addObserver(analysisFragment);
+        bitmapsObservable.notifyObservers();
+    }
+
+
     public Mat onCameraFrame(final CameraBridgeViewBase.CvCameraViewFrame inputFrame)
     {
 
@@ -258,15 +271,5 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         return rgba;
     }
 
-    @Override
-    public void handleFragmentViewCreated()
-    {
-        final ArrayList<Bitmap> bitmaps = new ArrayList<>();
-        bitmaps.add(bitmapFace1);
-        bitmaps.add(bitmapFace2);
 
-        final BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
-        bitmapsObservable.addObserver(detailFragment);
-        bitmapsObservable.notifyObservers();
-    }
 }
