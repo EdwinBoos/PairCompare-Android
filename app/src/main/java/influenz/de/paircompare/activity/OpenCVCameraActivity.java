@@ -127,24 +127,27 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     public void handleTakePhotoButtonPress(final View view)
     {
 
-        final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
-        final Mat roiFace1 = gray.submat(faces.toArray()[0]);
-        final Mat roiFace2 = gray.submat(faces.toArray()[0]);
+        if(faces.toArray().length > FaceEnum.minFacesFound)
+        {
+            final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
+            final Mat roiFace1 = gray.submat(faces.toArray()[0]);
+            final Mat roiFace2 = gray.submat(faces.toArray()[0]);
 
-        bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
-        bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
+            bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
+            bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
 
-        converterFactory.convert(roiFace1, bitmapFace1);
-        converterFactory.convert(roiFace2, bitmapFace2);
+            converterFactory.convert(roiFace1, bitmapFace1);
+            converterFactory.convert(roiFace2, bitmapFace2);
 
-        imageViewFace1.setImageBitmap(bitmapFace1);
-        imageViewFace2.setImageBitmap(bitmapFace2);
-        popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER,0,0);
+            imageViewFace1.setImageBitmap(bitmapFace1);
+            imageViewFace2.setImageBitmap(bitmapFace2);
+            popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER,0,0);
 
-        flipCameraButtonView.setEnabled(false);
-        photoButtonView.setEnabled(false);
-        switchView.setEnabled(false);
-        pauseCamera();
+            flipCameraButtonView.setEnabled(false);
+            photoButtonView.setEnabled(false);
+            switchView.setEnabled(false);
+            pauseCamera();
+        }
 
     }
 
@@ -237,7 +240,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         faces = new MatOfRect();
         nativeFaceDetector.detect(gray, faces);
         facesFound = faces.toArray().length;
-        int  facesCounter = 0;
+        int facesCounter = 0;
 
         for (final Rect nextFace : faces.toArray())
         {
