@@ -131,7 +131,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         {
             final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
             final Mat roiFace1 = gray.submat(faces.toArray()[0]);
-            final Mat roiFace2 = gray.submat(faces.toArray()[0]);
+            final Mat roiFace2 = gray.submat(faces.toArray()[1]);
 
             bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
             bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
@@ -158,9 +158,9 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
     public void handleRepeatButtonPress(final View view)
     {
-        switchView.setEnabled(false);
+        switchView.setEnabled(true);
         photoButtonView.setEnabled(false);
-        flipCameraButtonView.setEnabled(false);
+        flipCameraButtonView.setEnabled(true);
         resumeCamera();
         popupWindow.dismiss();
     }
