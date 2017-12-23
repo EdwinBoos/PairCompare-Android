@@ -9,7 +9,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import org.opencv.android.BaseLoaderCallback;
@@ -23,6 +22,8 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.fragment.AnalysisFragment;
 import influenz.de.paircompare.hybrid.DetectionBasedTracker;
@@ -49,8 +50,8 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     private AnalysisFragment analysisFragment;
     private MatOfRect faces;
     private CameraBridgeViewBase openCvCameraView;
-    private ImageView imageViewFace1;
-    private ImageView imageViewFace2;
+    private CircleImageView imageViewFace1;
+    private CircleImageView imageViewFace2;
     private Switch switchView;
     private PopupWindow popupWindow;
 
@@ -94,8 +95,8 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
         analysisFragment = new AnalysisFragment();
         final View customView = inflater.inflate(R.layout.popup_window, null);
-        imageViewFace1 = (ImageView) customView.findViewById(R.id.image_view_face1_id);
-        imageViewFace2 = (ImageView) customView.findViewById(R.id.image_view_face2_id);
+        imageViewFace1 = (CircleImageView) customView.findViewById(R.id.image_view_face1_id);
+        imageViewFace2 = (CircleImageView) customView.findViewById(R.id.image_view_face2_id);
         popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
     }
