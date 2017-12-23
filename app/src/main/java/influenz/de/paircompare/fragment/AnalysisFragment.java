@@ -62,9 +62,6 @@ public class AnalysisFragment extends Fragment implements Observer, IEnum
         bitmapFace1 = bitmapsObservable.getBitmapArrayList().get(0);
         bitmapFace2 = bitmapsObservable.getBitmapArrayList().get(1);
 
-        imageViewFace1.setImageBitmap(bitmapFace1);
-        imageViewFace2.setImageBitmap(bitmapFace2);
-
         new AsyncTask<Void, Void, Void>()
         {
 

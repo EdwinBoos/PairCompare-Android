@@ -4,7 +4,7 @@ import influenz.de.paircompare.util.Bitmap2MatConverter;
 import influenz.de.paircompare.util.Mat2BitmapConverter;
 import influenz.de.paircompare.util.NullObjectConverter;
 
-public final class ConverterFactory
+public final class  ConverterFactory
 {
 
     public static final String BITMAP_2_MAT_ACTION = "bitmap2mat";
