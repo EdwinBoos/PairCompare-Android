@@ -48,6 +48,7 @@ dependencies {
     })
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.tzutalin.dlib-android-app:dlib:1.0.4'
     compile 'junit:junit:4.12'

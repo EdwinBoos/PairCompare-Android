@@ -37,5 +37,13 @@
         android:layout_gravity="center"
         app:SpinKit_Color="@color/colorAccent" />
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_id"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
+
+
+
 
 </RelativeLayout>

@@ -8,17 +8,20 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import com.ToxicBakery.viewpager.transforms.RotateUpTransformer;
 import com.tzutalin.dlib.FaceDet;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import influenz.de.paircompare.R;
+import influenz.de.paircompare.adapter.PageAdapter;
 import influenz.de.paircompare.facefeature.Chin;
 import influenz.de.paircompare.factory.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
@@ -34,6 +37,8 @@ public class AnalysisFragment extends Fragment implements Observer, IEnum
     private Bitmap bitmapFace2;
     private ImageView imageViewFace1;
     private ImageView imageViewFace2;
+    private ViewPager viewPager;
+    private PageAdapter pageAdapter;
     private ProgressBar progressBarView;
     private ArrayList<Point> face1Landmarks;
     private ArrayList<Point> face2Landmarks;
@@ -46,7 +51,15 @@ public class AnalysisFragment extends Fragment implements Observer, IEnum
         imageViewFace1 = (ImageView) view.findViewById(R.id.face_1_id);
         imageViewFace2 = (ImageView) view.findViewById(R.id.face_2_id);
         progressBarView = (ProgressBar) view.findViewById(R.id.spin_kit_id);
+        // viewPager = (ViewPager) view.findViewById(R.id.view_pager_id);
 
+       // pageAdapter = new PageAdapter(getFragmentManager());
+
+        // viewPager.setPageTransformer(false, new RotateUpTransformer());
+        // viewPager.setAdapter(pageAdapter);
+
+        //  pageAdapter.addFragment(new AnalysisFragment());
+        // pageAdapter.notifyDataSetChanged();
         IFragmentCreatedListener callback = (IFragmentCreatedListener) getActivity();
         callback.onFragmentReady();
 
