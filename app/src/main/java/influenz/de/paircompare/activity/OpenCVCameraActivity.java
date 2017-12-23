@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Switch;
-
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
@@ -23,9 +22,7 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
-
 import java.util.ArrayList;
-
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.fragment.AnalysisFragment;
 import influenz.de.paircompare.hybrid.DetectionBasedTracker;
@@ -65,7 +62,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
             if (status == LoaderCallbackInterface.SUCCESS)
             {
                 System.loadLibrary("detectionBasedTracker");
-                final RawFileLoader haarCascadeFaceLoader = new RawFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_default);
+                final RawFileLoader haarCascadeFaceLoader = new RawFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt);
                 nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
                 haarCascadeFaceLoader.deleteCascadeDir();
                 openCvCameraView.enableView();

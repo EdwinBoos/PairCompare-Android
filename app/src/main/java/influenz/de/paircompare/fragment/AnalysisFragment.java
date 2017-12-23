@@ -45,7 +45,7 @@ public class AnalysisFragment extends Fragment implements Observer, IEnum
 
         imageViewFace1 = (ImageView) view.findViewById(R.id.face_1_id);
         imageViewFace2 = (ImageView) view.findViewById(R.id.face_2_id);
-        progressBarView = (ProgressBar) view.findViewById(R.id.progressbar_id);
+        progressBarView = (ProgressBar) view.findViewById(R.id.spin_kit_id);
 
         IFragmentCreatedListener callback = (IFragmentCreatedListener) getActivity();
         callback.onFragmentReady();

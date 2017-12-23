@@ -26,13 +26,16 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressbar_id"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <com.github.ybq.android.spinkit.SpinKitView
         android:visibility="gone"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/spin_kit_id"
+        style="@style/SpinKitView.Large.CubeGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/colorAccent" />
+
 
 </RelativeLayout>
