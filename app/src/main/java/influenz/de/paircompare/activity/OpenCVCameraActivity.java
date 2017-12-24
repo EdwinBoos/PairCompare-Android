@@ -254,7 +254,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
             final Rect eyeAreaLeft = eyeRegion.computeLeftEyeRegion();
 
             Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
-            Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
+            Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes) ;
 
         }
 

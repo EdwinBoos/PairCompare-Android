@@ -1,0 +1,74 @@
+package influenz.de.paircompare.fragment;
+
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+import influenz.de.paircompare.R;
+import influenz.de.paircompare.factory.FacialLandmarkFactory;
+import influenz.de.paircompare.interfaces.IEnum;
+import influenz.de.paircompare.observer.ChildFragmentObservable;
+import influenz.de.paircompare.util.LandmarksCanvas;
+
+public class FacialLandmarksFragment extends Fragment implements Observer
+{
+
+    private ImageView imageViewFace1;
+    private ImageView imageViewFace2;
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+    {
+        final View view = inflater.inflate(R.layout.fragment_facial_landmarks, container, false);
+        imageViewFace1 = (ImageView) view.findViewById(R.id.face_1_id);
+        imageViewFace2 = (ImageView) view.findViewById(R.id.face_2_id);
+        return view;
+    }
+
+    @Override
+    public void update(final Observable observable, final Object argument)
+    {
+
+        final ChildFragmentObservable childFragmentObservable = (ChildFragmentObservable) observable;
+        final ArrayList<Point> face1Landmarks = childFragmentObservable.getFace1Landmarks();
+        final ArrayList<Point> face2Landmarks = childFragmentObservable.getFace2Landmarks();
+        final Bitmap bitmapFace1 = childFragmentObservable.getBitmapFace1();
+        final Bitmap bitmapFace2 = childFragmentObservable.getBitmapFace2();
+        final FacialLandmarkFactory facialLandmarkFactory = new FacialLandmarkFactory(face1Landmarks);
+        final ArrayList<Point> chinLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.CHIN_BUILD).retrieve();
+        final ArrayList<Point> rightEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BUILD).retrieve();
+        final ArrayList<Point> leftEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BUILD).retrieve();
+        final ArrayList<Point> rightEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BROW_BUILD).retrieve();
+        final ArrayList<Point> leftEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BROW_BUILD).retrieve();
+        final ArrayList<Point> noseLatitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LATITUDE_BUILD).retrieve();
+        final ArrayList<Point> noseLongitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LONGITUDE_BUILD).retrieve();
+        final Paint faceLandmarkPaint = new Paint();
+        final LandmarksCanvas canvasFace1 = new LandmarksCanvas(bitmapFace1);
+        final LandmarksCanvas canvasFace2 = new LandmarksCanvas(bitmapFace2);
+
+        faceLandmarkPaint.setColor(Color.GREEN);
+        faceLandmarkPaint.setStrokeWidth(IEnum.ThicknessEnum.strokeWidth);
+        faceLandmarkPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        canvasFace1.drawLandmarksAsCircle(chinLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+        canvasFace1.drawLandmarksAsCircle(rightEyeLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+        canvasFace1.drawLandmarksAsCircle(leftEyeLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+        canvasFace1.drawLandmarksAsCircle(rightEyeBrowLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+        canvasFace1.drawLandmarksAsCircle(leftEyeBrowLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+        canvasFace1.drawLandmarksAsCircle(noseLatitudeLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+        canvasFace1.drawLandmarksAsCircle(noseLongitudeLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+        canvasFace2.drawLandmarksAsCircle(face2Landmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+
+        imageViewFace1.setImageBitmap(bitmapFace1);
+        imageViewFace2.setImageBitmap(bitmapFace2);
+
+    }
+}

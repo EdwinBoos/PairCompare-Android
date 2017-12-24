@@ -7,15 +7,26 @@
     android:background="@color/primary_dark_material_dark_1">
 
     <TextView
+        android:id="@+id/text_view_1_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorAccent"
         android:layout_marginTop="210dp"
-        android:textSize="30dp"
-        android:text="test">
+        android:textSize="30dp">
 
+    </TextView>
+
+    <TextView
+        android:id="@+id/text_view_2_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="210dp"
+        android:textSize="30dp">
 
     </TextView>
 
