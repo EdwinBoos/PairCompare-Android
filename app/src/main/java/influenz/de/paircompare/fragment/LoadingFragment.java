@@ -62,9 +62,9 @@ public class LoadingFragment extends Fragment implements Observer, IEnum
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    public void update(final Observable obserable, final Object argument)
+    public void update(final Observable observable, final Object argument)
     {
-        final BitmapsObservable bitmapsObservable = (BitmapsObservable) obserable;
+        final BitmapsObservable bitmapsObservable = (BitmapsObservable) observable;
         bitmapFace1 = bitmapsObservable.getBitmapArrayList().get(0);
         bitmapFace2 = bitmapsObservable.getBitmapArrayList().get(1);
 
