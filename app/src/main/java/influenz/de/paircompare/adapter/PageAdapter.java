@@ -29,6 +29,6 @@ public final class PageAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount()
     {
-        return 1;
+        return fragmentList.size();
     }
 }
