@@ -52,8 +52,8 @@ public class ComputingFragment extends Fragment implements Observer
 
         final double chinAngle1 = new Chin(chinLandmarks1).getAngleInDegrees();
         final double chinAngle2 = new Chin(chinLandmarks2).getAngleInDegrees();
-        textView1.setText(getString(R.string.chin_angle_text) + chinAngle1);
-        textView2.setText(getString(R.string.chin_angle_text) + chinAngle2);
+        textView1.setText(getString(R.string.chin_angle_text_1) + Math.round(chinAngle1));
+        textView2.setText(getString(R.string.chin_angle_text_2) + Math.round(chinAngle2));
 
 
     }

@@ -6,5 +6,6 @@
     <string name="okay">Is it okay?</string>
     <string name="yes">YES</string>
     <string name="again">AGAIN</string>
-    <string name="chin_angle_text">Chin-Angle:</string>
+    <string name="chin_angle_text_1">Chin-Angle Face 1:</string>
+    <string name="chin_angle_text_2">Chin-Angle Face 2:</string>
 </resources>

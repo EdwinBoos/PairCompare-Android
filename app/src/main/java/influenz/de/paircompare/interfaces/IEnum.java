@@ -9,7 +9,7 @@ public interface IEnum {
         public static final int Face1Index = 0;
         public static final int Face2Index = 0;
         public static final int minFaceSize = 1;
-        public static final int minFacesFound = 0; // starting with 0
+        public static final int minFacesFound = 1; // starting with 0
     }
     final class ThicknessEnum
     {
