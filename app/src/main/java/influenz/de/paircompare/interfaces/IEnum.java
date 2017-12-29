@@ -9,7 +9,7 @@ public interface IEnum {
         public static final int Face1Index = 0;
         public static final int Face2Index = 0;
         public static final int minFaceSize = 1;
-        public static final int minFacesFound = 0; // starting with 0
+        public static final int minFacesFound = 1; // starting with 0
     }
     final class ThicknessEnum
     {
@@ -24,9 +24,9 @@ public interface IEnum {
     }
     final class ScalarEnum
     {
-        public static final Scalar scalarFace = new Scalar(255, 255, 255);
-        public static final Scalar scalarText = new Scalar(255, 255, 255,255);
-        public static final Scalar scalarEyes = new Scalar(255, 0, 0, 255);
+        public static final Scalar scalarFace = new Scalar(0, 0, 0, 255);
+        public static final Scalar scalarText = new Scalar(0, 0, 0, 255);
+        public static final Scalar scalarEyes = new Scalar(0, 150, 136, 255);
     }
     final class IntentKeyEnum
     {

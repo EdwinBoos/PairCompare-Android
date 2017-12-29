@@ -1,5 +1,4 @@
 package influenz.de.paircompare.fragment;
-
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import influenz.de.paircompare.R;
-import influenz.de.paircompare.factory.FacialLandmarkFactory;
 import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.observer.ChildFragmentObservable;
 import influenz.de.paircompare.util.LandmarksCanvas;
@@ -43,28 +41,14 @@ public class FacialLandmarksFragment extends Fragment implements Observer
         final ArrayList<Point> face2Landmarks = childFragmentObservable.getFace2Landmarks();
         final Bitmap bitmapFace1 = childFragmentObservable.getBitmapFace1();
         final Bitmap bitmapFace2 = childFragmentObservable.getBitmapFace2();
-        final FacialLandmarkFactory facialLandmarkFactory = new FacialLandmarkFactory(face1Landmarks);
-        final ArrayList<Point> chinLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.CHIN_BUILD).retrieve();
-        final ArrayList<Point> rightEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BUILD).retrieve();
-        final ArrayList<Point> leftEyeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BUILD).retrieve();
-        final ArrayList<Point> rightEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.RIGHT_EYE_BROW_BUILD).retrieve();
-        final ArrayList<Point> leftEyeBrowLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.LEFT_EYE_BROW_BUILD).retrieve();
-        final ArrayList<Point> noseLatitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LATITUDE_BUILD).retrieve();
-        final ArrayList<Point> noseLongitudeLandmarks = facialLandmarkFactory.build(FacialLandmarkFactory.NOSE_LONGITUDE_BUILD).retrieve();
         final Paint faceLandmarkPaint = new Paint();
         final LandmarksCanvas canvasFace1 = new LandmarksCanvas(bitmapFace1);
         final LandmarksCanvas canvasFace2 = new LandmarksCanvas(bitmapFace2);
 
-        faceLandmarkPaint.setColor(Color.GREEN);
+        faceLandmarkPaint.setColor(getContext().getResources().getColor(R.color.colorAccent));
         faceLandmarkPaint.setStrokeWidth(IEnum.ThicknessEnum.strokeWidth);
         faceLandmarkPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        canvasFace1.drawLandmarksAsCircle(chinLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
-        canvasFace1.drawLandmarksAsCircle(rightEyeLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
-        canvasFace1.drawLandmarksAsCircle(leftEyeLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
-        canvasFace1.drawLandmarksAsCircle(rightEyeBrowLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
-        canvasFace1.drawLandmarksAsCircle(leftEyeBrowLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
-        canvasFace1.drawLandmarksAsCircle(noseLatitudeLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
-        canvasFace1.drawLandmarksAsCircle(noseLongitudeLandmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
+        canvasFace1.drawLandmarksAsCircle(face1Landmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
         canvasFace2.drawLandmarksAsCircle(face2Landmarks, IEnum.RadiusEnum.canvasRadius, faceLandmarkPaint );
 
         imageViewFace1.setImageBitmap(bitmapFace1);
