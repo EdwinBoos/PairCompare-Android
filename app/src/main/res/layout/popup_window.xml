@@ -1,38 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_custom_layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp"
-    android:background="@color/primary_dark_material_dark_1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fallbackDark"
     android:padding="3dp">
 
-    <LinearLayout
-        android:id="@+id/linear_layout_id"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:padding="5dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/colorAccent"
-            android:id="@+id/image_view_face1_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+        <LinearLayout
+            android:id="@+id/linear_layout_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/colorAccent"
-            android:id="@+id/image_view_face2_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_view_face1_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:layout_weight="1" />
 
-    </LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_view_face2_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_weight="1" />
+        </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,17 +37,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="40dp"
             android:text="@string/okay"
-            android:textColor="@color/colorAccent" />
+            android:textColor="@color/colorAccent"
+            android:textSize="40dp" />
 
         <Button
             android:id="@+id/accept_button_id"
             android:layout_width="wrap_content"
-            android:layout_marginBottom="3dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_below="@+id/tv"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="3dp"
             android:onClick="handleAcceptButtonPress"
             android:text="@string/yes" />
 
@@ -61,8 +55,8 @@
             android:id="@+id/repeat_button_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_below="@+id/accept_button_id"
+            android:layout_centerInParent="true"
             android:onClick="handleRepeatButtonPress"
             android:text="@string/again" />
 

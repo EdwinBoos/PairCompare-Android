@@ -33,22 +33,20 @@
             android:id="@+id/linearLayout">
 
             <ImageButton
-                android:id="@+id/flip_camera_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorAccent"
-                android:layout_marginStart="12dp"
-                android:src="@android:drawable/ic_menu_rotate"
-                android:onClick="handleFlipCameraButtonPress" />
-
-            <ImageButton
                 android:id="@+id/photo_button_id"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorAccent"
                 android:src="@android:drawable/ic_menu_camera"
                 android:enabled="false"
                 android:onClick="handleTakePhotoButtonPress" />
+
+            <ImageButton
+                android:id="@+id/flip_camera_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:src="@android:drawable/ic_menu_rotate"
+                android:onClick="handleFlipCameraButtonPress" />
 
         </LinearLayout>
 

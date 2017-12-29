@@ -2,6 +2,8 @@
 <resources>
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="cardview_initial_background">#009688</color>
     <color name="colorAccent">#009688</color>
+    <color name="fallbackDark">#212121</color>
     <color name="primary_dark_material_dark_1">#000000</color>
 </resources>
