@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import org.opencv.android.BaseLoaderCallback;
@@ -22,7 +22,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import influenz.de.paircompare.R;
 import influenz.de.paircompare.fragment.LoadingFragment;
@@ -45,8 +44,8 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     private Bitmap bitmapFace2;
     private int facesFound = 0;
     private DetectionBasedTracker nativeFaceDetector;
-    private Button photoButtonView;
-    private Button flipCameraButtonView;
+    private ImageButton photoImageButton;
+    private ImageButton flipCameraImageButton;
     private LoadingFragment loadingFragment;
     private MatOfRect faces;
     private CameraBridgeViewBase openCvCameraView;
@@ -89,8 +88,8 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         openCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_view);
         openCvCameraView.setVisibility(SurfaceView.VISIBLE);
         openCvCameraView.setCvCameraViewListener(this);
-        photoButtonView = (Button) findViewById(R.id.photo_button_id);
-        flipCameraButtonView = (Button) findViewById(R.id.flip_camera_id);
+        photoImageButton = (ImageButton) findViewById(R.id.photo_button_id);
+        flipCameraImageButton = (ImageButton) findViewById(R.id.flip_camera_id);
         switchView = (Switch) findViewById(R.id.switch_id);
 
         loadingFragment = new LoadingFragment();
@@ -112,7 +111,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     public void onResume()
     {
         super.onResume();
-        photoButtonView.setEnabled(false);
+        photoImageButton.setEnabled(false);
         resumeCamera();
     }
 
@@ -129,7 +128,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         {
             final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
             final Mat roiFace1 = gray.submat(faces.toArray()[0]);
-            final Mat roiFace2 = gray.submat(faces.toArray()[1]);
+            final Mat roiFace2 = gray.submat(faces.toArray()[0]);
 
             bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
             bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
@@ -141,8 +140,8 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
             imageViewFace2.setImageBitmap(bitmapFace2);
             popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER,0,0);
 
-            flipCameraButtonView.setEnabled(false);
-            photoButtonView.setEnabled(false);
+            flipCameraImageButton.setEnabled(false);
+            photoImageButton.setEnabled(false);
             switchView.setEnabled(false);
             pauseCamera();
         }
@@ -151,14 +150,14 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
     public void handleSwitchPress(final View view)
     {
-        photoButtonView.setEnabled(false);
+        photoImageButton.setEnabled(false);
     }
 
     public void handleRepeatButtonPress(final View view)
     {
         switchView.setEnabled(true);
-        photoButtonView.setEnabled(false);
-        flipCameraButtonView.setEnabled(true);
+        photoImageButton.setEnabled(false);
+        flipCameraImageButton.setEnabled(true);
         resumeCamera();
         popupWindow.dismiss();
     }
@@ -264,7 +263,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
             @Override
             public void run()
             {
-                photoButtonView.setEnabled((facesFound > FaceEnum.minFacesFound));
+                photoImageButton.setEnabled((facesFound > FaceEnum.minFacesFound));
             }
         });
 
