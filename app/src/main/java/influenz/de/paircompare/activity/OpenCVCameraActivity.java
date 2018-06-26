@@ -242,6 +242,8 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         for (Rect nextFace : faces.toArray())
         {
 
+            facesCounter++;
+
             EyeRegion eyeRegion = new EyeRegion(nextFace);
             FaceRegion faceRegion = new FaceRegion(nextFace);
             Point center = faceRegion.computeCenterPoint();
@@ -252,8 +254,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
             Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), ScalarEnum.scalarFace, ThicknessEnum.rectAngleFace);
             Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
             Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
-
-            facesCounter++;
 
         }
 
