@@ -33,7 +33,7 @@ import influenz.de.paircompare.interfaces.IFragmentCreatedListener;
 import influenz.de.paircompare.math.EyeRegion;
 import influenz.de.paircompare.math.FaceRegion;
 import influenz.de.paircompare.observer.BitmapsObservable;
-import influenz.de.paircompare.util.RawFileLoader;
+import influenz.de.paircompare.util.XMLFileLoader;
 
 public class OpenCVCameraActivity extends FragmentActivity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum, IFragmentCreatedListener
 {
@@ -53,7 +53,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     private CircleImageView imageViewFace2;
     private Switch switchView;
     private PopupWindow popupWindow;
-
     private final BaseLoaderCallback loaderCallback = new BaseLoaderCallback(this)
     {
         @Override
@@ -62,7 +61,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
             if (status == LoaderCallbackInterface.SUCCESS)
             {
                 System.loadLibrary("detectionBasedTracker");
-                final RawFileLoader haarCascadeFaceLoader = new RawFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt);
+                final XMLFileLoader haarCascadeFaceLoader = new XMLFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt);
                 nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
                 haarCascadeFaceLoader.deleteCascadeDir();
                 openCvCameraView.enableView();
@@ -126,9 +125,12 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
         if(faces.toArray().length > FaceEnum.minFacesFound)
         {
+
+            final int centerX = 0;
+            final int centerY = 0;
             final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
             final Mat roiFace1 = gray.submat(faces.toArray()[0]);
-            final Mat roiFace2 = gray.submat(faces.toArray()[0]);
+            final Mat roiFace2 = gray.submat(faces.toArray()[1]);
 
             bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
             bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
@@ -138,7 +140,7 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
             imageViewFace1.setImageBitmap(bitmapFace1);
             imageViewFace2.setImageBitmap(bitmapFace2);
-            popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER,0,0);
+            popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER, centerX, centerY);
 
             flipCameraImageButton.setEnabled(false);
             photoImageButton.setEnabled(false);
@@ -166,7 +168,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     {
 
         popupWindow.dismiss();
-
         getSupportFragmentManager().beginTransaction()
                                    .addToBackStack(null)
                                    .replace(R.id.container_id, loadingFragment)
@@ -238,22 +239,21 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
         facesFound = faces.toArray().length;
         int facesCounter = 0;
 
-        for (final Rect nextFace : faces.toArray())
+        for (Rect nextFace : faces.toArray())
         {
-            facesCounter++;
 
-            final EyeRegion eyeRegion = new EyeRegion(nextFace);
-            final FaceRegion faceRegion = new FaceRegion(nextFace);
+            EyeRegion eyeRegion = new EyeRegion(nextFace);
+            FaceRegion faceRegion = new FaceRegion(nextFace);
+            Point center = faceRegion.computeCenterPoint();
+            Rect eyeAreaRight = eyeRegion.computeRightEyeRegion();
+            Rect eyeAreaLeft = eyeRegion.computeLeftEyeRegion();
+
+            Imgproc.putText(rgba, getString(R.string.face_text) + facesCounter, new Point(center.x, center.y), Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
             Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), ScalarEnum.scalarFace, ThicknessEnum.rectAngleFace);
-            final Point center = faceRegion.computeCenterPoint();
-            Imgproc.putText(  rgba, "Face " + facesCounter, new Point(center.x, center.y ),
-                              Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
-
-            final Rect eyeAreaRight = eyeRegion.computeRightEyeRegion();
-            final Rect eyeAreaLeft = eyeRegion.computeLeftEyeRegion();
-
             Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
-            Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes) ;
+            Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
+
+            facesCounter++;
 
         }
 

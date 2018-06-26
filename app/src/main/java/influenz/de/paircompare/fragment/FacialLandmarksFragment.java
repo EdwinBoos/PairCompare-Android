@@ -1,6 +1,5 @@
 package influenz.de.paircompare.fragment;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;

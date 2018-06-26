@@ -10,4 +10,5 @@
     <string name="face_2">Face 2</string>
     <string name="chin_angle_text_1">Chin-Angle:</string>
     <string name="chin_angle_text_2">Chin-Angle:</string>
+    <string name="face_text">Face</string>
 </resources>

@@ -1,10 +1,10 @@
 package influenz.de.paircompare.factory;
 import influenz.de.paircompare.interfaces.IConverter;
-import influenz.de.paircompare.util.Bitmap2MatConverter;
-import influenz.de.paircompare.util.Mat2BitmapConverter;
-import influenz.de.paircompare.util.NullObjectConverter;
+import influenz.de.paircompare.converter.Bitmap2MatConverter;
+import influenz.de.paircompare.converter.Mat2BitmapConverter;
+import influenz.de.paircompare.converter.NullObjectConverter;
 
-public final class  ConverterFactory
+public final class ConverterFactory
 {
 
     public static final String BITMAP_2_MAT_ACTION = "bitmap2mat";

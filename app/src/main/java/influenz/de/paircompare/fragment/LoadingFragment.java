@@ -23,7 +23,7 @@ import influenz.de.paircompare.interfaces.IEnum;
 import influenz.de.paircompare.interfaces.IFragmentCreatedListener;
 import influenz.de.paircompare.observer.BitmapsObservable;
 import influenz.de.paircompare.observer.ChildFragmentObservable;
-import influenz.de.paircompare.util.RawFileLoader;
+import influenz.de.paircompare.util.XMLFileLoader;
 
 public class LoadingFragment extends Fragment implements Observer, IEnum
 {
@@ -81,7 +81,7 @@ public class LoadingFragment extends Fragment implements Observer, IEnum
             protected Void doInBackground(final Void... params)
             {
 
-                final File rawFile = new RawFileLoader(getContext(), R.raw.shape_predictor_68_face_landmarks).load();
+                final File rawFile = new XMLFileLoader(getContext(), R.raw.shape_predictor_68_face_landmarks).load();
                 face1Landmarks =
                         new FaceDet(rawFile.getAbsolutePath())
                                 .detect(bitmapFace1)
