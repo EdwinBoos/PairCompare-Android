@@ -9,7 +9,7 @@ Goals implemented :
 
 Todos:
 - Compute distance, scope, etc. of every face feature.
-- I need to implement a camera frame, so we get the face angle right.
+- I need to implement a camera frame, so mostly every photo will have the face angle right.
 
 
 Pictures taken from Pexels. [License](https://www.pexels.com/photo-license/) 
