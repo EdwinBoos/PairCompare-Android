@@ -1,6 +1,17 @@
 # PairCompare - Android - OpenCV - dlib
 A research project in computer vision.
 
+Goals implemented : 
+- Recognize faces (via camera) 
+- Take photo, crop ROI (Region of Interest) and convert it into a .bitmap file
+- Recognize face landmarks and seperate these into face features ( like chin, nose, right eye, left eye etc... )
+- Compute angle of face features. ( is done with chin ).
+
+Todos:
+- Compute distance, scope, etc. of every face feature.
+- We need to implement a camera frame, so we get the face angle right.
+
+
 Pictures taken from Pexels. [License](https://www.pexels.com/photo-license/) 
 
 [Face Left](https://www.pexels.com/photo/woman-wearing-coat-762020/)
