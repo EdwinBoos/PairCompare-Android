@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import influenz.de.paircompare.interfaces.IEnum;
 
 
-public class ShapeLandmarks extends BaseLandmarks implements IEnum
-{
+public class ShapeLandmarks extends BaseLandmarks implements IEnum {
 
-    public ShapeLandmarks(final ArrayList<Point> facialLandmarks)
-    {
-        super(facialLandmarks.subList(LandmarkCodesEnum.startShapeIndex, LandmarkCodesEnum.endShapeIndex));
-    }
+ public ShapeLandmarks(final ArrayList < Point > facialLandmarks) {
+  super(facialLandmarks.subList(LandmarkCodesEnum.startShapeIndex, LandmarkCodesEnum.endShapeIndex));
+ }
 
 }
