@@ -4,12 +4,10 @@ import android.graphics.Point;
 import java.util.ArrayList;
 import influenz.de.paircompare.interfaces.IEnum;
 
-public class NoseLatitudeLandmarks extends BaseLandmarks implements IEnum
-{
+public class NoseLatitudeLandmarks extends BaseLandmarks implements IEnum {
 
-    public NoseLatitudeLandmarks(final ArrayList<Point> facialLandmarks)
-    {
-        super(facialLandmarks.subList(LandmarkCodesEnum.startNoseLatitudeIndex, LandmarkCodesEnum.endNoseLatitudeIndex));
-    }
+ public NoseLatitudeLandmarks(final ArrayList < Point > facialLandmarks) {
+  super(facialLandmarks.subList(LandmarkCodesEnum.startNoseLatitudeIndex, LandmarkCodesEnum.endNoseLatitudeIndex));
+ }
 
 }
