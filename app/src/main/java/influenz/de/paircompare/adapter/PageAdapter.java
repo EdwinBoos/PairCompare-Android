@@ -8,27 +8,23 @@ import java.util.ArrayList;
 
 public final class PageAdapter extends FragmentStatePagerAdapter {
 
-    private final ArrayList<Fragment> fragmentList = new ArrayList<>();
+ private final ArrayList < Fragment > fragmentList = new ArrayList < > ();
 
-    public PageAdapter(final FragmentManager fragmentManager)
-    {
-        super(fragmentManager);
-    }
+ public PageAdapter(final FragmentManager fragmentManager) {
+  super(fragmentManager);
+ }
 
-    @Override
-    public Fragment getItem(final int position)
-    {
-        return fragmentList.get(position);
-    }
+ @Override
+ public Fragment getItem(final int position) {
+  return fragmentList.get(position);
+ }
 
-    public void addFragment(final Fragment fragment)
-    {
-        fragmentList.add(fragment);
-    }
+ public void addFragment(final Fragment fragment) {
+  fragmentList.add(fragment);
+ }
 
-    @Override
-    public int getCount()
-    {
-        return fragmentList.size();
-    }
+ @Override
+ public int getCount() {
+  return fragmentList.size();
+ }
 }
