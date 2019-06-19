@@ -4,27 +4,23 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.Observable;
 
-public final class BitmapsObservable extends Observable
-{
+public final class BitmapsObservable extends Observable {
 
-    private final ArrayList<Bitmap> bitmapArrayList;
+ private final ArrayList < Bitmap > bitmapArrayList;
 
-    public BitmapsObservable(final ArrayList<Bitmap> bitmapArrayList)
-    {
-        this.bitmapArrayList = bitmapArrayList;
-    }
+ public BitmapsObservable(final ArrayList < Bitmap > bitmapArrayList) {
+  this.bitmapArrayList = bitmapArrayList;
+ }
 
-    @Override
-    public void notifyObservers()
-    {
-        setChanged();
-        super.notifyObservers();
-    }
+ @Override
+ public void notifyObservers() {
+  setChanged();
+  super.notifyObservers();
+ }
 
-    public ArrayList<Bitmap> getBitmapArrayList()
-    {
-        return bitmapArrayList;
-    }
+ public ArrayList < Bitmap > getBitmapArrayList() {
+  return bitmapArrayList;
+ }
 
 
 }
