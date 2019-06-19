@@ -35,240 +35,212 @@ import influenz.de.paircompare.math.FaceRegion;
 import influenz.de.paircompare.observer.BitmapsObservable;
 import influenz.de.paircompare.util.XMLFileLoader;
 
-public class OpenCVCameraActivity extends FragmentActivity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum, IFragmentCreatedListener
-{
+public class OpenCVCameraActivity extends FragmentActivity implements CameraBridgeViewBase.CvCameraViewListener2, IEnum, IFragmentCreatedListener {
 
-    private Mat rgba;
-    private Mat gray;
-    private Bitmap bitmapFace1;
-    private Bitmap bitmapFace2;
-    private int facesFound = 0;
-    private DetectionBasedTracker nativeFaceDetector;
-    private ImageButton photoImageButton;
-    private ImageButton flipCameraImageButton;
-    private LoadingFragment loadingFragment;
-    private MatOfRect faces;
-    private CameraBridgeViewBase openCvCameraView;
-    private CircleImageView imageViewFace1;
-    private CircleImageView imageViewFace2;
-    private Switch switchView;
-    private PopupWindow popupWindow;
-    private final BaseLoaderCallback loaderCallback = new BaseLoaderCallback(this)
-    {
-        @Override
-        public void onManagerConnected(final int status)
-        {
-            if (status == LoaderCallbackInterface.SUCCESS)
-            {
-                System.loadLibrary("detectionBasedTracker");
-                final XMLFileLoader haarCascadeFaceLoader = new XMLFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt);
-                nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
-                haarCascadeFaceLoader.deleteCascadeDir();
-                openCvCameraView.enableView();
+ private Mat rgba;
+ private Mat gray;
+ private Bitmap bitmapFace1;
+ private Bitmap bitmapFace2;
+ private int facesFound = 0;
+ private DetectionBasedTracker nativeFaceDetector;
+ private ImageButton photoImageButton;
+ private ImageButton flipCameraImageButton;
+ private LoadingFragment loadingFragment;
+ private MatOfRect faces;
+ private CameraBridgeViewBase openCvCameraView;
+ private CircleImageView imageViewFace1;
+ private CircleImageView imageViewFace2;
+ private Switch switchView;
+ private PopupWindow popupWindow;
+ private final BaseLoaderCallback loaderCallback = new BaseLoaderCallback(this) {
+  @Override
+  public void onManagerConnected(final int status) {
+   if (status == LoaderCallbackInterface.SUCCESS) {
+    System.loadLibrary("detectionBasedTracker");
+    final XMLFileLoader haarCascadeFaceLoader = new XMLFileLoader(OpenCVCameraActivity.this, R.raw.haarcascade_frontalface_alt);
+    nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
+    haarCascadeFaceLoader.deleteCascadeDir();
+    openCvCameraView.enableView();
 
-            }
-            else
-            {
-                super.onManagerConnected(status);
-            }
-        }
-    };
+   } else {
+    super.onManagerConnected(status);
+   }
+  }
+ };
 
 
-    @Override
-    public void onCreate(final Bundle savedInstanceState)
-    {
+ @Override
+ public void onCreate(final Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        final LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        setContentView(R.layout.activity_opencvcamera);
+  super.onCreate(savedInstanceState);
+  getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+  final LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+  setContentView(R.layout.activity_opencvcamera);
 
-        openCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_view);
-        openCvCameraView.setVisibility(SurfaceView.VISIBLE);
-        openCvCameraView.setCvCameraViewListener(this);
-        photoImageButton = (ImageButton) findViewById(R.id.photo_button_id);
-        flipCameraImageButton = (ImageButton) findViewById(R.id.flip_camera_id);
-        switchView = (Switch) findViewById(R.id.switch_id);
+  openCvCameraView = (CameraBridgeViewBase) findViewById(R.id.camera_view);
+  openCvCameraView.setVisibility(SurfaceView.VISIBLE);
+  openCvCameraView.setCvCameraViewListener(this);
+  photoImageButton = (ImageButton) findViewById(R.id.photo_button_id);
+  flipCameraImageButton = (ImageButton) findViewById(R.id.flip_camera_id);
+  switchView = (Switch) findViewById(R.id.switch_id);
 
-        loadingFragment = new LoadingFragment();
-        final View customView = inflater.inflate(R.layout.popup_window, null);
-        imageViewFace1 = (CircleImageView) customView.findViewById(R.id.image_view_face1_id);
-        imageViewFace2 = (CircleImageView) customView.findViewById(R.id.image_view_face2_id);
-        popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+  loadingFragment = new LoadingFragment();
+  final View customView = inflater.inflate(R.layout.popup_window, null);
+  imageViewFace1 = (CircleImageView) customView.findViewById(R.id.image_view_face1_id);
+  imageViewFace2 = (CircleImageView) customView.findViewById(R.id.image_view_face2_id);
+  popupWindow = new PopupWindow(customView, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-    }
+ }
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        pauseCamera();
-    }
+ @Override
+ public void onPause() {
+  super.onPause();
+  pauseCamera();
+ }
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        photoImageButton.setEnabled(false);
-        resumeCamera();
-    }
+ @Override
+ public void onResume() {
+  super.onResume();
+  photoImageButton.setEnabled(false);
+  resumeCamera();
+ }
 
-    public void onDestroy()
-    {
-        super.onDestroy();
-        pauseCamera();
-    }
+ public void onDestroy() {
+  super.onDestroy();
+  pauseCamera();
+ }
 
-    public void handleTakePhotoButtonPress(final View view)
-    {
-
-        if(faces.toArray().length > FaceEnum.minFacesFound)
-        {
-
-            final int centerX = 0;
-            final int centerY = 0;
-            final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
-            final Mat roiFace1 = gray.submat(faces.toArray()[0]);
-            final Mat roiFace2 = gray.submat(faces.toArray()[1]);
-
-            bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
-            bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
-
-            converterFactory.convert(roiFace1, bitmapFace1);
-            converterFactory.convert(roiFace2, bitmapFace2);
-
-            imageViewFace1.setImageBitmap(bitmapFace1);
-            imageViewFace2.setImageBitmap(bitmapFace2);
-            popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER, centerX, centerY);
-
-            flipCameraImageButton.setEnabled(false);
-            photoImageButton.setEnabled(false);
-            switchView.setEnabled(false);
-            pauseCamera();
-        }
-
-    }
-
-    public void handleSwitchPress(final View view)
-    {
-        photoImageButton.setEnabled(false);
-    }
-
-    public void handleRepeatButtonPress(final View view)
-    {
-        switchView.setEnabled(true);
-        photoImageButton.setEnabled(false);
-        flipCameraImageButton.setEnabled(true);
-        resumeCamera();
-        popupWindow.dismiss();
-    }
-
-    public void handleAcceptButtonPress(final View view)
-    {
-
-        popupWindow.dismiss();
-        getSupportFragmentManager().beginTransaction()
-                                   .addToBackStack(null)
-                                   .replace(R.id.container_id, loadingFragment)
-                                   .commit();
-    }
-
-    public void handleFlipCameraButtonPress(final View view)
-    {
-        pauseCamera();
-        openCvCameraView.setCameraIndex(
-                ( openCvCameraView.getCameraIndex() == CameraBridgeViewBase.CAMERA_ID_BACK)
-                        ? CameraBridgeViewBase.CAMERA_ID_FRONT
-                        : CameraBridgeViewBase.CAMERA_ID_BACK );
-        resumeCamera();
-    }
-
-    private void resumeCamera()
-    {
-        if (!OpenCVLoader.initDebug())
-        {
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, loaderCallback);
-        }
-        else
-        {
-            loaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-        }
-
-    }
-
-    private void pauseCamera()
-    {
-        if (openCvCameraView != null)
-            openCvCameraView.disableView();
-
-    }
-
-    public void onCameraViewStarted(final int width, final int height)
-    {
-        gray = new Mat();
-        rgba = new Mat();
-    }
-
-    public void onCameraViewStopped()
-    {
-        gray.release();
-        rgba.release();
-    }
-
-    @Override
-    public void onFragmentReady()
-    {
-        final ArrayList<Bitmap> bitmaps = new ArrayList<>();
-        bitmaps.add(bitmapFace1);
-        bitmaps.add(bitmapFace2);
-
-        final BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
-        bitmapsObservable.addObserver(loadingFragment);
-        bitmapsObservable.notifyObservers();
-    }
+ public void handleTakePhotoButtonPress(final View view) {
 
 
-    public Mat onCameraFrame(final CameraBridgeViewBase.CvCameraViewFrame inputFrame)
-    {
 
-        rgba = inputFrame.rgba();
-        gray = inputFrame.gray();
-        faces = new MatOfRect();
-        nativeFaceDetector.detect(gray, faces);
-        facesFound = faces.toArray().length;
-        int facesCounter = 0;
+  final int centerX = 0;
+  final int centerY = 0;
+  final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
+  final Mat roiFace1 = gray.submat(faces.toArray()[0]);
+  final Mat roiFace2 = gray.submat(faces.toArray()[1]);
 
-        for (Rect nextFace : faces.toArray())
-        {
+  bitmapFace1 = Bitmap.createBitmap(roiFace1.cols(), roiFace1.rows(), Bitmap.Config.ARGB_8888);
+  bitmapFace2 = Bitmap.createBitmap(roiFace2.cols(), roiFace2.rows(), Bitmap.Config.ARGB_8888);
 
-            facesCounter++;
+  converterFactory.convert(roiFace1, bitmapFace1);
+  converterFactory.convert(roiFace2, bitmapFace2);
 
-            EyeRegion eyeRegion = new EyeRegion(nextFace);
-            FaceRegion faceRegion = new FaceRegion(nextFace);
-            Point center = faceRegion.computeCenterPoint();
-            Rect eyeAreaRight = eyeRegion.computeRightEyeRegion();
-            Rect eyeAreaLeft = eyeRegion.computeLeftEyeRegion();
+  imageViewFace1.setImageBitmap(bitmapFace1);
+  imageViewFace2.setImageBitmap(bitmapFace2);
+  popupWindow.showAtLocation(openCvCameraView, Gravity.CENTER, centerX, centerY);
 
-            Imgproc.putText(rgba, getString(R.string.face_text) + facesCounter, new Point(center.x, center.y), Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
-            Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), ScalarEnum.scalarFace, ThicknessEnum.rectAngleFace);
-            Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
-            Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
+  flipCameraImageButton.setEnabled(false);
+  photoImageButton.setEnabled(false);
+  switchView.setEnabled(false);
+  pauseCamera();
 
-        }
 
-        // We need to run android view changes on a different thread.
-        OpenCVCameraActivity.this.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                photoImageButton.setEnabled((facesFound > FaceEnum.minFacesFound));
-            }
-        });
+ }
 
-        return rgba;
-    }
+ public void handleSwitchPress(final View view) {
+  photoImageButton.setEnabled(false);
+ }
+
+ public void handleRepeatButtonPress(final View view) {
+  switchView.setEnabled(true);
+  photoImageButton.setEnabled(false);
+  flipCameraImageButton.setEnabled(true);
+  resumeCamera();
+  popupWindow.dismiss();
+ }
+
+ public void handleAcceptButtonPress(final View view) {
+
+  popupWindow.dismiss();
+  getSupportFragmentManager().beginTransaction()
+   .addToBackStack(null)
+   .replace(R.id.container_id, loadingFragment)
+   .commit();
+ }
+
+ public void handleFlipCameraButtonPress(final View view) {
+  pauseCamera();
+  openCvCameraView.setCameraIndex(
+   (openCvCameraView.getCameraIndex() == CameraBridgeViewBase.CAMERA_ID_BACK) ?
+   CameraBridgeViewBase.CAMERA_ID_FRONT :
+   CameraBridgeViewBase.CAMERA_ID_BACK);
+  resumeCamera();
+ }
+
+ private void resumeCamera() {
+  if (!OpenCVLoader.initDebug()) {
+   OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, loaderCallback);
+  } else {
+   loaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+  }
+
+ }
+
+ private void pauseCamera() {
+  if (openCvCameraView != null)
+   openCvCameraView.disableView();
+
+ }
+
+ public void onCameraViewStarted(final int width, final int height) {
+  gray = new Mat();
+  rgba = new Mat();
+ }
+
+ public void onCameraViewStopped() {
+  gray.release();
+  rgba.release();
+ }
+
+ @Override
+ public void onFragmentReady() {
+  final ArrayList < Bitmap > bitmaps = new ArrayList < > ();
+  bitmaps.add(bitmapFace1);
+  bitmaps.add(bitmapFace2);
+
+  final BitmapsObservable bitmapsObservable = new BitmapsObservable(bitmaps);
+  bitmapsObservable.addObserver(loadingFragment);
+  bitmapsObservable.notifyObservers();
+ }
+
+
+ public Mat onCameraFrame(final CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+
+  rgba = inputFrame.rgba();
+  gray = inputFrame.gray();
+  faces = new MatOfRect();
+  nativeFaceDetector.detect(gray, faces);
+  facesFound = faces.toArray().length;
+  int facesCounter = 0;
+
+  for (Rect nextFace: faces.toArray()) {
+
+   facesCounter++;
+
+   EyeRegion eyeRegion = new EyeRegion(nextFace);
+   FaceRegion faceRegion = new FaceRegion(nextFace);
+   Point center = faceRegion.computeCenterPoint();
+   Rect eyeAreaRight = eyeRegion.computeRightEyeRegion();
+   Rect eyeAreaLeft = eyeRegion.computeLeftEyeRegion();
+
+   Imgproc.putText(rgba, getString(R.string.face_text) + facesCounter, new Point(center.x, center.y), Core.FONT_HERSHEY_SIMPLEX, FontSizeEnum.faceCounter, ScalarEnum.scalarText);
+   Imgproc.rectangle(rgba, nextFace.tl(), nextFace.br(), ScalarEnum.scalarFace, ThicknessEnum.rectAngleFace);
+   Imgproc.rectangle(rgba, eyeAreaLeft.tl(), eyeAreaLeft.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
+   Imgproc.rectangle(rgba, eyeAreaRight.tl(), eyeAreaRight.br(), ScalarEnum.scalarEyes, ThicknessEnum.rectAngleEyes);
+
+  }
+
+  // We need to run android view changes on a different thread.
+  OpenCVCameraActivity.this.runOnUiThread(new Runnable() {
+   @Override
+   public void run() {
+    photoImageButton.setEnabled((facesFound > FaceEnum.minFacesFound));
+   }
+  });
+
+  return rgba;
+ }
 
 
 }
