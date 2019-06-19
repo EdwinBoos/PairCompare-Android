@@ -5,9 +5,8 @@ import android.graphics.Bitmap;
 
 import org.opencv.core.Mat;
 
-public interface IConverter
-{
+public interface IConverter {
 
-    public Object convert(final Mat mat, final Bitmap bitmap);
+ public Object convert(final Mat mat, final Bitmap bitmap);
 
 }
