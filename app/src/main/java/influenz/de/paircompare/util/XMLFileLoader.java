@@ -9,50 +9,44 @@ import java.io.InputStream;
 
 public final class XMLFileLoader {
 
-    private final File rawFile;
-    private final File rawDir;
-    private final int rawFilePath;
-    private final Context context;
-    private final String fileExtension = ".xml";
+ private final File rawFile;
+ private final File rawDir;
+ private final int rawFilePath;
+ private final Context context;
+ private final String fileExtension = ".xml";
 
-    public XMLFileLoader(final Context context, final int rawFilePath)
-    {
-        this.context = context;
-        this.rawFilePath = rawFilePath;
-        this.rawDir = context.getDir("cascade", Context.MODE_PRIVATE);
-        this.rawFile = new File(rawDir, String.valueOf(rawFilePath) + fileExtension);
-    }
+ public XMLFileLoader(final Context context, final int rawFilePath) {
+  this.context = context;
+  this.rawFilePath = rawFilePath;
+  this.rawDir = context.getDir("cascade", Context.MODE_PRIVATE);
+  this.rawFile = new File(rawDir, String.valueOf(rawFilePath) + fileExtension);
+ }
 
-    public File load()
-    {
+ public File load() {
 
-        final InputStream is = this.context.getResources().openRawResource(this.rawFilePath);
-        try
-        {
+  final InputStream is = this.context.getResources().openRawResource(this.rawFilePath);
+  try {
 
-            final FileOutputStream os = new FileOutputStream(this.rawFile);
-            int bytesRead;
-            final byte[] buffer = new byte[4096];
-            while ((bytesRead = is.read(buffer)) != -1) {
-                os.write(buffer, 0, bytesRead);
-            }
-            is.close();
-            os.close();
+   final FileOutputStream os = new FileOutputStream(this.rawFile);
+   int bytesRead;
+   final byte[] buffer = new byte[4096];
+   while ((bytesRead = is.read(buffer)) != -1) {
+    os.write(buffer, 0, bytesRead);
+   }
+   is.close();
+   os.close();
 
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+  } catch (IOException e) {
+   e.printStackTrace();
+  }
 
-        return this.rawFile;
+  return this.rawFile;
 
-    }
+ }
 
-    public XMLFileLoader deleteCascadeDir()
-    {
-        this.rawDir.delete();
-        return this;
-    }
+ public XMLFileLoader deleteCascadeDir() {
+  this.rawDir.delete();
+  return this;
+ }
 
 }
-
