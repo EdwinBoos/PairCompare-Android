@@ -6,26 +6,22 @@ import android.graphics.Point;
 import java.util.ArrayList;
 
 
-public class Scope
-{
+public class Scope {
 
-    private final ArrayList<Point> pointArrayList;
+ private final ArrayList < Point > pointArrayList;
 
-    public Scope(final ArrayList<Point> pointArrayList)
-    {
+ public Scope(final ArrayList < Point > pointArrayList) {
 
-        this.pointArrayList = pointArrayList;
-    }
+  this.pointArrayList = pointArrayList;
+ }
 
 
-    public double compute()
-    {
+ public double compute() {
 
-        for( Point point : this.pointArrayList )
-        {
+  for (Point point: this.pointArrayList) {
 
-        }
+  }
 
-        return 0.0;
-    }
+  return 0.0;
+ }
 }
