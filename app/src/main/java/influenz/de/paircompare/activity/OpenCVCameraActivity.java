@@ -61,7 +61,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
     nativeFaceDetector = new DetectionBasedTracker(haarCascadeFaceLoader.load().getAbsolutePath(), FaceEnum.minFaceSize);
     haarCascadeFaceLoader.deleteCascadeDir();
     openCvCameraView.enableView();
-
    } else {
     super.onManagerConnected(status);
    }
@@ -111,9 +110,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
  }
 
  public void handleTakePhotoButtonPress(final View view) {
-
-
-
   final int centerX = 0;
   final int centerY = 0;
   final IConverter converterFactory = new ConverterFactory().build(ConverterFactory.MAT_2_BITMAP_ACTION);
@@ -135,7 +131,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
   switchView.setEnabled(false);
   pauseCamera();
 
-
  }
 
  public void handleSwitchPress(final View view) {
@@ -151,7 +146,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
  }
 
  public void handleAcceptButtonPress(final View view) {
-
   popupWindow.dismiss();
   getSupportFragmentManager().beginTransaction()
    .addToBackStack(null)
@@ -180,7 +174,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
  private void pauseCamera() {
   if (openCvCameraView != null)
    openCvCameraView.disableView();
-
  }
 
  public void onCameraViewStarted(final int width, final int height) {
@@ -206,7 +199,6 @@ public class OpenCVCameraActivity extends FragmentActivity implements CameraBrid
 
 
  public Mat onCameraFrame(final CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-
   rgba = inputFrame.rgba();
   gray = inputFrame.gray();
   faces = new MatOfRect();
