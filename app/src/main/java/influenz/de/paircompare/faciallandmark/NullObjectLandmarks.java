@@ -8,15 +8,12 @@ import influenz.de.paircompare.interfaces.IFacialLandmark;
 public final class NullObjectLandmarks implements IFacialLandmark {
 
 
-    public NullObjectLandmarks(final ArrayList<Point> facialLandmarks) { }
+ public NullObjectLandmarks(final ArrayList < Point > facialLandmarks) {}
 
-    @Override
-    public <T> ArrayList<T> retrieve()
-    {
-        Log.e("NullObjectLandmarks", "Please check the action you provided to the landmarkFactory, " +
-                "something went wrong.");
-        return (ArrayList<T>) new ArrayList<Void>();
-    }
+ @Override
+ public < T > ArrayList < T > retrieve() {
+  Log.e("NullObjectLandmarks", "Please check the action you provided to the landmarkFactory, " +
+   "something went wrong.");
+  return (ArrayList < T > ) new ArrayList < Void > ();
+ }
 }
-
-
